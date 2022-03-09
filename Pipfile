@@ -10,6 +10,7 @@ pillow = "*"
 django-ckeditor = "*"
 django-filter = "*"
 django-rest-knox = "*"
+gunicorn = "*"
 
 [dev-packages]
 
