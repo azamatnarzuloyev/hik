@@ -39,7 +39,7 @@ class Order(models.Model):
     )
 
     total_amount = models.CharField(max_length=30, blank=False, null=False)
-    currency = models.CharField(max_length=20, choices=CURRENCIES)
+    # currency = models.CharField(max_length=20, choices=CURRENCIES,blank=True, null=True)
     payment_status = models.CharField(
         max_length=20, choices=PAYMENT_STATUSES, default="A"
     )
@@ -73,7 +73,7 @@ class OrderPayment(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE)
     ref = models.CharField(max_length=50, null=True)
     amount = models.CharField(max_length=20, default=0)
-    currency = models.CharField(max_length=20, choices=CURRENCIES)
+    # currency = models.CharField(max_length=20, choices=CURRENCIES)
     method = models.CharField(max_length=30, choices=PAYMENT_OPTIONS, null=False)
     date = models.DateTimeField(auto_now_add=True)
 

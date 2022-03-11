@@ -1,7 +1,12 @@
+from itertools import product
+from unicodedata import category
 from django.shortcuts import render, get_object_or_404
+# from flask import Response
+from rest_framework.views import APIView
 from rest_framework import generics, response, status, views, permissions
 from . import serializers
 from . import models
+from rest_framework.response import Response
 from .utils import (
     setProductCategories,
     saveProductImages,
@@ -17,18 +22,21 @@ import threading, json
 
 class TopProducts(generics.ListAPIView):
     serializer_class = serializers.ProductListMini
-
+   
     def get_queryset(self):
-        queryset = models.Product.objects
-        if self.request.user.is_authenticated and self.request.user.has_perms:
-            return queryset.all()
-        return queryset.filter(available=True).order_by("?")[:20]
+        queryset = models.Product.objects.filter(available=True).order_by("?")[:20]
+        return queryset
+
+        # if self.request.user.is_authenticated and self.request.user.has_perms:
+        #     return queryset.all()
+        # return queryset.filter(available=True).order_by("?")[:20]
 
 
 class ProductListCreate(generics.ListCreateAPIView):
     serializer_class = serializers.ProductListCreate
     queryset = models.Product.objects.all()
-
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["name"]
     def get(self, request, *args, **kwargs):
         self.serializer_class = serializers.ProductListMini
         return super().get(request, *args, **kwargs)
@@ -77,10 +85,31 @@ class CategoryListCreate(generics.ListCreateAPIView):
     search_fields = ["name"]
 
 
-class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+
+# class CategoryProduct(APIView):
+#     """
+#     Return product by category
+#     """
+
+#     def get(self, request, query=None):
+#         queryset = models.Product.objects.filter(category__slug=query)
+#         serializer = serializers.ProductListCreate(queryset, many=True)
+#         return Response(serializer.data)
+
+
+
+
+
+
+
+class CategoryDetail(generics.ListAPIView):
     serializer_class = serializers.CategoryDetailSerializer
     queryset = models.Category.objects.all()
-    lookup_field = "slug"
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["name"]
+    lookup_field = ("slug")
+    # ordering = ['pk', 'name']
+   
 
     def put(self, request, *args, **kwargs):
         self.serializer_class = serializers.CategorySerializer
@@ -107,11 +136,11 @@ class BannerAdListCreate(generics.ListCreateAPIView):
             serializer.save(product=product, image=fileImage)
 
     def get_queryset(self):
-        queryset = models.BannerAd.objects
+        queryset = models.BannerAd.objects.filter(active=True)
 
-        if self.request.user.is_authenticated and self.request.user.has_perms:
-            return queryset.all()
-        return queryset.filter(active=True)
+        # if self.request.user.is_authenticated and self.request.user.has_perms:
+        #     return queryset.all()
+        # return queryset.filter(active=True)
 
 
 class BannerAdsDetail(generics.RetrieveUpdateDestroyAPIView, BannerAdListCreate):

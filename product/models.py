@@ -11,7 +11,7 @@ from io import StringIO, BytesIO
 from django.core.files.base import ContentFile
 import os.path
 from ckeditor.fields import RichTextField
-
+from mptt.models import  TreeForeignKey, MPTTModel
 # Create your models here.
 from PIL import Image
 
@@ -52,23 +52,28 @@ def MakeThumb(instance, thubm_size=((400, 400))):
     return True
 
 
-class Category(models.Model):
+class Category(MPTTModel):
     """
     name, @products
     """
 
-    name = models.CharField(max_length=200, blank=False, null=False, unique=True)
+    name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, null=True, editable=False, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-
+    parent = TreeForeignKey(
+        "self",
+        on_delete=models.PROTECT,
+        related_name="children",
+        null=True,
+        blank=True,
+    )
     @property
     def product_count(self):
         return self.products.count()
 
-    class Meta:
-        verbose_name_plural = "categories"
-        ordering = ["pk", "name"]
-
+    class MPTTMeta:
+        order_insertion_by = ["name"]
+        ordering = ['pk', 'name']
     def __str__(self):
         return self.name
 
@@ -121,9 +126,16 @@ class Image(models.Model):
     image = models.ImageField(upload_to="products", blank=False, null=True)
 
 class Product(models.Model):
+    mgpiksel = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     slug = models.SlugField(unique=True, editable=False, null=False, blank=True)
-    categories = models.ManyToManyField(Category)
+    categories = TreeForeignKey(
+        Category,
+        related_name='categories',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
     description = models.TextField(blank=True, null=True)
     brand = models.ForeignKey(Brand, models.CASCADE, blank=True, null=True)
     market_price = models.FloatField(
@@ -134,7 +146,7 @@ class Product(models.Model):
     )
     image = models.ImageField(upload_to="banners", blank=False, null=True)
     thumbnail = models.ImageField(
-        upload_to="banners/thumbnails/", blank=False, null=True
+        upload_to="banners/thumbnails/", blank=True, null=True
     )
     # picture = models.ImageField(upload_to="image/product")
     colors = models.TextField(default="[]", blank=True, null=True)

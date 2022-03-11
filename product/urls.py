@@ -23,4 +23,5 @@ urlpatterns = [
         views.BannerAdsDetail.as_view(),
         name="banner_ads_list_create",
     ),
+   
 ]

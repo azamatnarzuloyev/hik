@@ -1,3 +1,4 @@
+from multiprocessing import managers
 from rest_framework import serializers
 from . import models
 import json
@@ -17,10 +18,14 @@ class ImageSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     product_count = serializers.CharField(read_only=True)
-
+    children = serializers.SerializerMethodField()
     class Meta:
+        depth = 1
         model = models.Category
-        fields = "__all__"
+        fields = ("id",'name','slug','children', 'product_count')
+        read_only = True
+    def get_children(self, obj):
+        return CategorySerializer(obj.get_children(), many=True).data
 
     def validate_name(self, data):
         if models.Category.objects.filter(name__iexact=data.strip()).exists():
@@ -48,8 +53,7 @@ class ProductListMini(serializers.ModelSerializer):
             "image",
             "image_count",
             "has_banner_ad",
-            'texttitle',
-            'text',
+           
         )
 
         extra_kwargs = {"price": {"read_only": True}}
@@ -86,7 +90,7 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
 class ProductListCreate(serializers.ModelSerializer):
     colors = serializers.JSONField(required=False)
     images = ImageSerializer(required=False, read_only=True, many=True)
-    categories = serializers.SerializerMethodField()
+    # categories = serializers.SerializerMethodField()
     brand = BrandSerializer(read_only=True)
     slug = serializers.ReadOnlyField()
 
@@ -109,7 +113,7 @@ class ProductListCreate(serializers.ModelSerializer):
             'text',
         )
         extra_kwargs = {"price": {"read_only": True}}
-
+   
     def get_categories(self, obj):
         objects = obj.categories.all()
         data = [(category.name) for category in objects]

@@ -11,6 +11,8 @@ django-ckeditor = "*"
 django-filter = "*"
 django-rest-knox = "*"
 gunicorn = "*"
+django-mptt = "*"
+django-forestadmin = "*"
 
 [dev-packages]
 
