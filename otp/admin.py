@@ -15,7 +15,7 @@ class UserAdmin(admin.ModelAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('firs_name','last_name', 'phone',   'is_admin')
+    list_display = ('password', 'phone',   'is_admin', 'last_name', 'firs_name')
     list_filter = ('is_active' ,'is_admin' )
     fieldsets = (
         (None, {'fields': ('phone','password')}),
@@ -39,8 +39,6 @@ class UserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, UserAdmin)
-
-
 
 # Remove Group Model from admin. We're not using it.
 admin.site.unregister(Group)
