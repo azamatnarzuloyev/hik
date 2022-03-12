@@ -1,13 +1,14 @@
+# from more_itertools import last
 from rest_framework import permissions, generics, status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+# from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import permissions, generics, status
 
 from django.contrib.auth import login
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
-# import requests
+import requests
 
 from knox.auth import TokenAuthentication
 from knox.views import LoginView as KnoxLoginView
@@ -18,11 +19,11 @@ from .utils import otp_generator
 
 from .models import User, PhoneOTP
 from .serializers import (CreateUserSerialzier, 
-                        ChangePasswordSerializer, 
+                       
                         LoginUserSerializer, 
                         UserSerializer, 
                         UserSerializer,
-                        ForgotPasswordSerializer)
+                      )
 
 
 
@@ -38,22 +39,22 @@ class LoginAPI(KnoxLoginView):
         return super().post(request, format=None)
 
 
-class ChangePasswordView(generics.UpdateAPIView):
-    queryset = User.objects.all()
-    serializer_class = ChangePasswordSerializer
-    permission_classes = [permissions.IsAuthenticated, ]
+# class ChangePasswordView(generics.UpdateAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = ChangePasswordSerializer
+#     permission_classes = [permissions.IsAuthenticated, ]
 
 
 
-class UpdateProfileView(generics.UpdateAPIView):
-    queryset = User.objects.all()
-    permission_classes = (permissions.IsAuthenticated,)
-    serializer_class = UserSerializer
+# class UpdateProfileView(generics.UpdateAPIView):
+#     queryset = User.objects.all()
+#     permission_classes = (permissions.IsAuthenticated,)
+#     serializer_class = UserSerializer
 
 
 class UserView(generics.RetrieveAPIView):
     authentication_classes = (TokenAuthentication,)
-    permission_classes = [permissions.IsAuthenticated, ]
+    permission_classes = [permissions.IsAdminUser, ]
     serializer_class = UserSerializer
 
     def get_object(self):
@@ -73,11 +74,12 @@ def send_otp(phone):
         key = otp_generator()
         phone = str(phone)
         otp_key = str(key)
-        #link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=fc9e5177-b3e7-11e8-a895-0200cd936042&to={phone}&from=wisfrg&templatename=wisfrags&var1={otp_key}'
+        link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=fc9e5177-b3e7-11e8-a895-0200cd936042&to={phone}&from=wisfrg&templatename=wisfrags&var1={otp_key}'
    
-        #result = requests.get(link, verify=False)
+        result = requests.get(link, verify=False)
 
-        return otp_key
+        return result
+        
     else:
         return False
 
@@ -88,9 +90,7 @@ ALso, if the OTP count is more than 10 then, user has to contact the customer ca
 class SendPhoneOTP(APIView):
     def post(self, *args, **kwargs):
         phone_number = self.request.data.get('phone')
-
         if phone_number:
-
             phone = str(phone_number)
             user = User.objects.filter(phone__iexact = phone)
 
@@ -118,6 +118,7 @@ class SendPhoneOTP(APIView):
                         old_otp.otp = otp
                         old_otp.save()
                         print("count increase", old_otp.count)
+                        # return print(otp)
                         return Response ({
                         'status':True,
                         'detail':'OTP sent successfully.'
@@ -131,6 +132,7 @@ class SendPhoneOTP(APIView):
                         'status':True,
                         'detail':'OTP sent successfully.'
                         })
+                        
                         
 
                 else:
@@ -197,16 +199,17 @@ class Register(APIView):
     # permission_classes_by_action = {'create': [permissions.AllowAny]}
     def post(self, *args, **kwargs):
         phone = self.request.data.get('phone', False)
-        password = self.request.data.get('password', False)
+        last_name = self.request.data.get('last_name', False)
+        firs_name = self.request.data.get('firs_name', False)
         
-        if phone and password:
+        if phone and last_name and firs_name:
             phone = str(phone)
             user = User.objects.filter(phone__iexact = phone)
 
             if user.exists():
                 return Response({
                     'status': False, 
-                    'detail': 'Phone Number already have account associated. Kindly try forgot password'
+                    'detail': 'Phone Number already have account associated.'
                     })
 
             else:
@@ -215,11 +218,10 @@ class Register(APIView):
                     old=old.first()
 
                     if old.logged:
-                        temp_data = {'phone':phone,'password':password}
-                        serializer = CreateUserSerialzier(data=temp_data)
+                        temp_data = {'phone':phone,'las_name':last_name, 'firs_name':firs_name}
+                        serializer = UserSerializer(data=temp_data)
                         serializer.is_valid(raise_exception = True)
                         user = serializer.save()
-
                         old.delete()
                         return Response({
                             'status' : True, 
@@ -356,51 +358,51 @@ class ValidateForgotOtp(APIView):
 
 
 
-class ForgotPasswordChange(APIView):
-    def post(self, *args, **kwargs):
-        phone = self.request.data.get('phone', False)
-        otp = self.request.data.get('otp', False)
-        password = self.request.data.get('password', False)
+# class ForgotPasswordChange(APIView):
+#     def post(self, *args, **kwargs):
+#         phone = self.request.data.get('phone', False)
+#         otp = self.request.data.get('otp', False)
+#         password = self.request.data.get('password', False)
 
-        if phone and otp and password:
-            old = PhoneOTP.objects.filter(Q(phone__iexact = phone) & Q(otp__iexact = otp))
-            if old.exists():
+#         if phone and otp and password:
+#             old = PhoneOTP.objects.filter(Q(phone__iexact = phone) & Q(otp__iexact = otp))
+#             if old.exists():
 
-                old = old.first()
-                if old.forgot_logged:
+#                 old = old.first()
+#                 if old.forgot_logged:
 
-                    post_data ={
-                    'phone':phone,
-                    'password':password
-                    }
-                    user_obj = get_object_or_404(User, phone__iexact=phone)
-                    serializer = ForgotPasswordSerializer(data = post_data)
+#                     post_data ={
+#                     'phone':phone,
+#                     'password':password
+#                     }
+#                     user_obj = get_object_or_404(User, phone__iexact=phone)
+#                     serializer = ForgotPasswordSerializer(data = post_data)
 
-                    if serializer.is_valid():
-                        if user_obj:
-                            user_obj.set_password(serializer.data.get('password'))
-                            user_obj.is_active = True
-                            user_obj.save()
-                            old.delete()
-                            return Response({
-                            'status' : True,
-                            'detail' : 'Password changed successfully. Please Login'
-                            })
+#                     if serializer.is_valid():
+#                         if user_obj:
+#                             user_obj.set_password(serializer.data.get('password'))
+#                             user_obj.is_active = True
+#                             user_obj.save()
+#                             old.delete()
+#                             return Response({
+#                             'status' : True,
+#                             'detail' : 'Password changed successfully. Please Login'
+#                             })
 
-                else:
-                    return Response({
-                    'status' : False,
-                    'detail' : 'OTP Verification failed. Please try again in previous step'
-                    })
+#                 else:
+#                     return Response({
+#                     'status' : False,
+#                     'detail' : 'OTP Verification failed. Please try again in previous step'
+#                     })
 
-            else:
-                return Response({
-                'status' : False,
-                'detail' : 'Phone and otp are not matching or a new phone has entered. Request a new otp in forgot password'
-            })
+#             else:
+#                 return Response({
+#                 'status' : False,
+#                 'detail' : 'Phone and otp are not matching or a new phone has entered. Request a new otp in forgot password'
+#             })
 
-        else:
-            return Response({
-                'status' : False,
-                'detail' : 'Post request have parameters mising.'
-            })
+#         else:
+#             return Response({
+#                 'status' : False,
+#                 'detail' : 'Post request have parameters mising.'
+#             })

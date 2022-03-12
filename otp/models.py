@@ -39,10 +39,10 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractBaseUser):
     phone_regex = RegexValidator( regex   =r'^\+?1?\d{9,14}$', message ="Phone number must be entered in the format: '+999999999'. Up to 14 digits allowed.")
     phone       = models.CharField(validators=[phone_regex], max_length=17, unique=True)
-    name        = models.CharField(max_length = 20, blank = True, null = True)
-
-    standard    = models.CharField(max_length = 3, blank = True, null = True)
-    score       = models.IntegerField(default = 16)
+    firs_name        = models.CharField(max_length = 20, blank = True, null = True)
+    last_name        = models.CharField(max_length = 20, blank = True, null = True)
+    # standard    = models.CharField(max_length = 3, blank = True, null = True)
+    # score       = models.IntegerField(default = 16)
 
     first_login = models.BooleanField(default=False)
     
@@ -67,9 +67,9 @@ class User(AbstractBaseUser):
     def has_module_perms(self, app_label):
     	return True
 
-    # @property
-    # def is_staff(self):
-    #     return self.is_admin
+    @property
+    def is_staff(self):
+        return self.is_admin
 
 
 
@@ -78,7 +78,7 @@ class User(AbstractBaseUser):
 
 
 class PhoneOTP(models.Model):
-    phone_regex = RegexValidator( regex   =r'^\+?1?\d{9,14}$', message ="Phone number must be entered in the format: '+999999999'. Up to 14 digits allowed.")
+    phone_regex = RegexValidator( regex   =r'^\+?1?\d{9,14}$', message ="Phone number must be entered in the format: '+990167647'. Up to 14 digits allowed.")
     phone       = models.CharField(validators=[phone_regex], max_length=17, unique=True)
     otp         = models.CharField(max_length = 9, blank = True, null= True)
 
