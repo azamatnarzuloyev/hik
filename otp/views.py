@@ -27,16 +27,16 @@ from .serializers import (CreateUserSerialzier,
 
 
 
-class LoginAPI(KnoxLoginView):
-    permission_classes = (permissions.AllowAny, )
+# class LoginAPI(KnoxLoginView):
+#     permission_classes = (permissions.AllowAny, )
 
-    def post(self, request, format=None):
-        serializer = LoginUserSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
+#     def post(self, request, format=None):
+#         serializer = LoginUserSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         user = serializer.validated_data['user']
 
-        login(request, user)
-        return super().post(request, format=None)
+#         login(request, user)
+#         return super().post(request, format=None)
 
 
 # class ChangePasswordView(generics.UpdateAPIView):
@@ -74,11 +74,11 @@ def send_otp(phone):
         key = otp_generator()
         phone = str(phone)
         otp_key = str(key)
-        link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=fc9e5177-b3e7-11e8-a895-0200cd936042&to={phone}&from=wisfrg&templatename=wisfrags&var1={otp_key}'
+        # link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=fc9e5177-b3e7-11e8-a895-0200cd936042&to={phone}&from=wisfrg&templatename=wisfrags&var1={otp_key}'
    
-        result = requests.get(link, verify=False)
+        # result = requests.get(link, verify=False)
 
-        return result
+        return otp_key
         
     else:
         return False
@@ -252,7 +252,7 @@ class Register(APIView):
 
 
 
-class ValidatePhoneForgot(APIView):
+class ValidatePhoneLogin(APIView):
     def post(self, *args, **kwargs):
         phone_number = self.request.data.get('phone')
 
@@ -308,7 +308,7 @@ class ValidatePhoneForgot(APIView):
 
 
 
-class ValidateForgotOtp(APIView):
+class ValidateloginOtp(APIView):
     def post(self, *args, **kwargs):
         phone = self.request.data.get('phone', False)
         otp_sent = self.request.data.get('otp', False)
@@ -355,7 +355,16 @@ class ValidateForgotOtp(APIView):
             })
 
 
+class LoginAPI(KnoxLoginView):
+    permission_classes = (permissions.AllowAny, )
 
+    def post(self, request, format=None):
+        serializer = LoginUserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+
+        login(request, user)
+        return super().post(request, format=None)
 
 
 # class ForgotPasswordChange(APIView):

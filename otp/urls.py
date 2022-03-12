@@ -6,8 +6,8 @@ from .views import (SendPhoneOTP,
 				
 				
 					UserView,
-					ValidatePhoneForgot,
-					ValidateForgotOtp,
+					ValidatePhoneLogin,
+					ValidateloginOtp,
 					)
 from knox import views as knox_views
 
@@ -24,8 +24,8 @@ urlpatterns = [
 	path('user_profile/', UserView.as_view()),
 	# path('update_profile/<int:pk>/', UpdateProfileView.as_view()),
 
-	path('validate_phone_forgot/', ValidatePhoneForgot.as_view()),
-	path('validate_forgot_otp/', ValidateForgotOtp.as_view()),
+	path('ValidatePhoneLogin/', ValidatePhoneLogin.as_view()),
+	path('alidateloginOtp/', ValidateloginOtp.as_view()),
 	# path('change_forgot_password/', ForgotPasswordChange.as_view())
 
 ]
