@@ -203,7 +203,6 @@ class Register(APIView):
         if phone and last_name and firs_name:
             phone = str(phone)
             user = User.objects.filter(phone__iexact = phone)
-
             if user.exists():
                 return Response({
                     'status': False, 

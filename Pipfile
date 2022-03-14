@@ -14,6 +14,8 @@ gunicorn = "*"
 django-mptt = "*"
 django-forestadmin = "*"
 django-countries = "*"
+django-cors-headers = "*"
+psycopg2 = "*"
 
 [dev-packages]
 

@@ -9,7 +9,7 @@ from .views import (SendPhoneOTP,
 					ValidatePhoneLogin,
 					ValidateloginOtp,
 					)
-from knox import views as knox_views
+#  
 
 urlpatterns = [
 
