@@ -112,10 +112,14 @@ DATABASES = {
         'NAME': 'hik',
         'USER': 'hik',
         'PASSWORD': 'hik',
-        'HOST': '',
+        'HOST': 'localhost',
         'PORT': '',
     }
 }
+# DATABASES = {
+#     'default': env.dj_db_url("DATABASE_URL")
+        
+#   } 
 
 
 # Password validation
