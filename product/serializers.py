@@ -85,7 +85,7 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Category
         fields = ("id", "name", "products")
-
+    
 
 class ProductListCreate(serializers.ModelSerializer):
     colors = serializers.JSONField(required=False)

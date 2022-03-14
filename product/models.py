@@ -135,7 +135,7 @@ class Product(models.Model):
         related_name='categories',
         on_delete=models.SET_NULL,
         null=True,
-        blank=True,
+        blank=True,    
     )
     quantity = models.IntegerField(default=1, null=False, blank=True)
     description = models.TextField(blank=True, null=True)

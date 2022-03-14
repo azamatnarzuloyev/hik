@@ -90,12 +90,13 @@ class CategoryListCreate(generics.ListCreateAPIView):
 #     """
 #     Return product by category
 #     """
-
 #     def get(self, request, query=None):
 #         queryset = models.Product.objects.filter(category__slug=query)
 #         serializer = serializers.ProductListCreate(queryset, many=True)
 #         return Response(serializer.data)
+   
 
+ 
 
 
 
@@ -107,7 +108,7 @@ class CategoryDetail(generics.ListAPIView):
     queryset = models.Category.objects.all()
     filter_backends = [filters.SearchFilter]
     search_fields = ["name"]
-    lookup_field = ("slug")
+    lookup_field = ("slug",'id')
     # ordering = ['pk', 'name']
    
 
