@@ -99,15 +99,13 @@ class SendPhoneOTP(APIView):
 
             else: #if the user doesn't exists 
                 otp = send_otp(phone)
-                print(phone, otp)
+                print( otp, phone)
                 if otp: #if the otp already exists, then we'll increase the PhoneOTP.count by 1, max_limit is 10
                     otp = str(otp)
                     old_otp = PhoneOTP.objects.filter(phone__iexact = phone)
-
                     if old_otp.exists():
                         old_otp = old_otp.first()
                         otp_count = old_otp.count
-
                         if otp_count > 10:
                             return Response ({
                             'status':False,

@@ -136,6 +136,7 @@ class Product(models.Model):
         null=True,
         blank=True,
     )
+    quantity = models.IntegerField(default=1, null=False, blank=True)
     description = models.TextField(blank=True, null=True)
     brand = models.ForeignKey(Brand, models.CASCADE, blank=True, null=True)
     market_price = models.FloatField(

@@ -41,10 +41,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'knox',
     'django_filters',
+    'django_countries',
     'ckeditor',
     'product',
     'search',
-    'checkout',
+    # 'checkout',
+    'order',
     'otp',
 ]
 
@@ -131,5 +133,6 @@ AUTH_USER_MODEL = 'otp.User'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-
+import os
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# PAYSTACK_TEST_KEY = os('PAYSTACK_TEST_KEY')
