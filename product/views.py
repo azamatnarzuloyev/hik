@@ -80,7 +80,7 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class CategoryListCreate(generics.ListCreateAPIView):
     serializer_class = serializers.CategorySerializer
-    queryset = models.Category.objects.all()
+    queryset = models.Category.objects.filter(level=0)
     filter_backends = [filters.SearchFilter]
     search_fields = ["name"]
 

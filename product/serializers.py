@@ -22,7 +22,7 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = models.Category
-        fields = ("id",'name','slug','children', 'product_count')
+        fields = ("id",'name','slug','children','rasm', 'product_count')
         read_only = True
     def get_children(self, obj):
         return CategorySerializer(obj.get_children(), many=True).data

@@ -60,6 +60,7 @@ class Category(MPTTModel):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, null=True, editable=False, blank=True)
     created = models.DateTimeField(auto_now_add=True)
+    rasm = models.ImageField(upload_to='media/category',null=True, blank=True )
     parent = TreeForeignKey(
         "self",
         on_delete=models.PROTECT,

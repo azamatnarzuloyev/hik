@@ -16,6 +16,10 @@ django-forestadmin = "*"
 django-countries = "*"
 django-cors-headers = "*"
 psycopg2 = "*"
+django-environ = "*"
+environs = {extras = ["django"], version = "*"}
+psycopg2-binary = "*"
+whitenoise = "*"
 
 [dev-packages]
 
