@@ -53,16 +53,12 @@ INSTALLED_APPS = [
     'order',
     'otp',
 ]
-CORS_ORIGIN_ALLOW_ALL = False
-# CORS_ORIGIN_WHITELIST = [
-#     'http://buyy.herokuapp.com',
-#     'https://buyy.herokuapp.com',
-#     'http://localhost:8080',
-#     'http://127.0.0.1:8080',
-#     'https://shirt-shop.netlify.app',
-#     'http://shirt-shop.netlify.app',
-#     'https://buyy.s3.eu-west-2.amazonaws.com'
-# ]
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = [
+    'http://buyy.herokuapp.com',
+    'https://buyy.herokuapp.com',
+    
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -112,7 +108,7 @@ DATABASES = {
         'NAME': 'hik',
         'USER': 'hik',
         'PASSWORD': 'hik',
-        'HOST': 'localhost',
+        'HOST': '',
         'PORT': '',
     }
 }
