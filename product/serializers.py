@@ -1,6 +1,3 @@
-from asyncore import read
-from multiprocessing import managers
-from unicodedata import category
 
 from rest_framework import serializers
 from . import models
@@ -105,13 +102,16 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Category
         fields = ("id", "name", "products")
-
+class StatuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Status
+        fields= "__all__"
     
 
 class ProductListCreate(serializers.ModelSerializer):
     colors = serializers.JSONField(required=False)
     images = ImageSerializer(required=False, read_only=True, many=True)
-
+    status = StatuSerializer(read_only=True)
     brand = BrandSerializer(read_only=True)
     slug = serializers.ReadOnlyField()
     categories = serializers.SerializerMethodField()

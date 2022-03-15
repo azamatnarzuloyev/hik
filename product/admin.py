@@ -10,5 +10,4 @@ admin.site.register(Category, MPTTModelAdmin)
 admin.site.register(models.Brand)
 admin.site.register(models.Product)
 admin.site.register(models.Image)
-class PersonAdmin(admin.ModelAdmin):
-    list_filter = ('name', 'categories')
+admin.site.register(models.Status)

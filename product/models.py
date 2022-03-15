@@ -1,4 +1,5 @@
 from distutils.command.upload import upload
+from multiprocessing import parent_process
 from tokenize import blank_re
 from django.db import models
 from django.utils.text import slugify
@@ -124,7 +125,14 @@ class Image(models.Model):
     image = models.ImageField(upload_to="products", blank=False, null=True)
 
     
-  
+class Status(models.Model):
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, null=True, editable=False, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    rasm = models.ImageField(upload_to='media/category/',null=True, blank=True )
+
+    def __str__(self):
+        return self.name
 
 class Product(models.Model):
     mgpiksel = models.IntegerField(blank=True, null=True)
@@ -137,6 +145,7 @@ class Product(models.Model):
         null=True,
         blank=True,    
     )
+    status = models.ManyToManyField(Status)
     quantity = models.IntegerField(default=1, null=False, blank=True)
     description = models.TextField(blank=True, null=True)
     brand = models.ForeignKey(Brand, models.CASCADE, blank=True, null=True)
@@ -146,7 +155,7 @@ class Product(models.Model):
     discount_price = models.FloatField(
         max_length=200, default=None, blank=True, null=True
     )
-    # pictures = models.ImageField(upload_to='media/product/firs/', blank=True, null=True)
+    # pictures = models.ImageField(upload_to='media/product/firs/', blank=True, null=tru)
     image = models.ImageField(upload_to="banners", blank=False, null=True)
    
     # picture = models.ImageField(upload_to="image/product")

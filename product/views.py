@@ -23,29 +23,28 @@ from django_filters import rest_framework as fil
 
 
 
-# class ProductFilter(fil.FilterSet):
-#     min_price = fil.NumberFilter(field_name="price", lookup_expr='gte')
-#     max_price = fil.NumberFilter(field_name="price", lookup_expr='lte')
+class ProductFilter(fil.FilterSet):
+    min_price = fil.NumberFilter(field_name="price", lookup_expr='gte')
+    max_price = fil.NumberFilter(field_name="price", lookup_expr='lte')
 
-#     class Meta:
-#         model = models.Product
-#         fields = ['min_price', 'max_price','name']
+    class Meta:
+        model = models.Product
+        fields = ['name','categories','brand','status']
 
 
-# class ProductList(generics.ListAPIView):
-#     queryset = models.Product.objects.all()
-#     serializer_class = serializers.ProductListCreate
-#     filter_backends = (fil.DjangoFilterBackend,)
-#     filterset_class = ProductFilter
+class ProductList(generics.ListAPIView):
+    queryset = models.Product.objects.all()
+    serializer_class = serializers.ProductListCreate
+    filter_backends = (fil.DjangoFilterBackend,)
+    filterset_class = ProductFilter
      
 
-class CategoryProductViews(APIView):
-    def get(self, query=None):
-        queryset = models.Product.objects.filter(categories_slug=query)
-        serializer = serializers.ProductListMini(queryset, many=True)
-        return (serializer.data)
-   
-    
+# class CategoryProductViews(APIView):
+#     def get(self, query=None):
+#         queryset = models.Product.objects.filter(categories_slug=query)
+#         serializer = serializers.ProductListMini(queryset, many=True)
+#         return (serializer.data)
+
 
 
 class TopProducts(generics.ListAPIView):
@@ -63,9 +62,11 @@ class TopProducts(generics.ListAPIView):
 class ProductListCreate(generics.ListAPIView):
     serializer_class = serializers.ProductListCreate
     queryset = models.Product.objects.all()
-    filter_backends = [filters.SearchFilter]
-    search_fields = ["name"]
+    # filter_backends = [filters.SearchFilter]
+    # search_fields = ["name"]
     lookup_field = "slug"
+    filter_backends = (fil.DjangoFilterBackend,)
+    filterset_class = ProductFilter
     def get(self, request, *args, **kwargs):
         self.serializer_class = serializers.ProductListMini
         return super().get(request, *args, **kwargs)
@@ -87,6 +88,7 @@ class ProductDetail(generics.RetrieveAPIView):
     serializer_class = serializers.ProductListCreate
     queryset = models.Product.objects.all()
     lookup_field = "slug"
+
 
     # def perform_update(self, serializer):
     #     brand_data = self.request.data.get("brand")
@@ -141,6 +143,8 @@ class CategoryDetail(generics.ListAPIView):
     filter_backends = [filters.SearchFilter]
     search_fields = ["name"]
     lookup_field = ("slug")
+    # filter_backends = (fil.DjangoFilterBackend,)
+    # filterset_class = ProductFilter
     # ordering = ['pk', 'name']
    
 
