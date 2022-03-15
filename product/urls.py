@@ -18,7 +18,7 @@ urlpatterns = [
         views.BannerAdsReOrder.as_view(),
         name="banner_ads_reorder",
     ),
-    # path('categories/<slug>/', views.CategoryProduct.as_view(), name='categories_detail'),
+    path('category/<str:query>/', views.CategoryProductViews.as_view(), name='categories_detail'),
     path(
         "banners/<slug>/",
         views.BannerAdsDetail.as_view(),

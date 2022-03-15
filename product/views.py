@@ -1,6 +1,6 @@
-from itertools import product
-from unicodedata import category
+
 from django.shortcuts import render, get_object_or_404
+
 # from flask import Response
 from rest_framework.views import APIView
 from rest_framework import generics, response, status, views, permissions
@@ -18,6 +18,34 @@ from rest_framework import filters
 import datetime
 from django.core.mail import send_mail
 import threading, json
+from rest_framework import generics
+from django_filters import rest_framework as fil
+
+
+
+# class ProductFilter(fil.FilterSet):
+#     min_price = fil.NumberFilter(field_name="price", lookup_expr='gte')
+#     max_price = fil.NumberFilter(field_name="price", lookup_expr='lte')
+
+#     class Meta:
+#         model = models.Product
+#         fields = ['min_price', 'max_price','name']
+
+
+# class ProductList(generics.ListAPIView):
+#     queryset = models.Product.objects.all()
+#     serializer_class = serializers.ProductListCreate
+#     filter_backends = (fil.DjangoFilterBackend,)
+#     filterset_class = ProductFilter
+     
+
+class CategoryProductViews(APIView):
+    def get(self, query=None):
+        queryset = models.Product.objects.filter(categories_slug=query)
+        serializer = serializers.ProductListMini(queryset, many=True)
+        return (serializer.data)
+   
+    
 
 
 class TopProducts(generics.ListAPIView):
@@ -32,53 +60,57 @@ class TopProducts(generics.ListAPIView):
         # return queryset.filter(available=True).order_by("?")[:20]
 
 
-class ProductListCreate(generics.ListCreateAPIView):
+class ProductListCreate(generics.ListAPIView):
     serializer_class = serializers.ProductListCreate
     queryset = models.Product.objects.all()
     filter_backends = [filters.SearchFilter]
     search_fields = ["name"]
+    lookup_field = "slug"
     def get(self, request, *args, **kwargs):
         self.serializer_class = serializers.ProductListMini
         return super().get(request, *args, **kwargs)
 
-    def perform_create(self, serializer):
-        category_data = self.request.data.get("categories")
-        brand_data = self.request.data.get("brand")
-        data = {}
-        data["brand"] = addProductBrand(brand_data)
+    # def perform_create(self, serializer):
+    #     category_data = self.request.data.get("categories")
+    #     brand_data = self.request.data.get("brand")
+    #     data = {}
+    #     data["brand"] = addProductBrand(brand_data)
 
-        product = serializer.save(**data)
+    #     product = serializer.save(**data)
 
-        addProductBrand(brand_data)
-        setProductCategories(self.request, product)
-        saveProductImages(self.request, product)
+    #     addProductBrand(brand_data)
+    #     setProductCategories(self.request, product)
+    #     saveProductImages(self.request, product)
 
 
-class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
+class ProductDetail(generics.RetrieveAPIView):
     serializer_class = serializers.ProductListCreate
     queryset = models.Product.objects.all()
     lookup_field = "slug"
 
-    def perform_update(self, serializer):
-        brand_data = self.request.data.get("brand")
-        data = {}
-        data["brand"] = addProductBrand(brand_data)
+    # def perform_update(self, serializer):
+    #     brand_data = self.request.data.get("brand")
+    #     data = {}
+    #     data["brand"] = addProductBrand(brand_data)
 
-        product = serializer.save(**data)
+    #     product = serializer.save(**data)
 
-        saveProductImages(self.request, product)
-        setProductCategories(self.request, product)
-        removeProductImages(self.request)
+    #     saveProductImages(self.request, product)
+    #     setProductCategories(self.request, product)
+    #     removeProductImages(self.request)
 
-    def _allowed_methods(self):
-        return [
-            m
-            for m in super(ProductDetail, self)._allowed_methods()
-            if m not in ["PATCH", "DELETE", "HEAD", "OPTIONS", "PUT"]
-        ]
+    # def _allowed_methods(self):
+    #     return [
+    #         m
+    #         for m in super(ProductDetail, self)._allowed_methods()
+    #         if m not in ["PATCH", "DELETE", "HEAD", "OPTIONS", "PUT"]
+    #     ]
 
 
-class CategoryListCreate(generics.ListCreateAPIView):
+
+
+
+class CategoryListCreate(generics.ListAPIView):
     serializer_class = serializers.CategorySerializer
     queryset = models.Category.objects.filter(level=0)
     filter_backends = [filters.SearchFilter]
@@ -108,13 +140,13 @@ class CategoryDetail(generics.ListAPIView):
     queryset = models.Category.objects.all()
     filter_backends = [filters.SearchFilter]
     search_fields = ["name"]
-    lookup_field = ("slug",'id')
+    lookup_field = ("slug")
     # ordering = ['pk', 'name']
    
 
-    def put(self, request, *args, **kwargs):
-        self.serializer_class = serializers.CategorySerializer
-        return super().put(request, *args, **kwargs)
+    # def put(self, request, *args, **kwargs):
+    #     self.serializer_class = serializers.CategorySerializer
+    #     return super().put(request, *args, **kwargs)
 
 
 class BannerAdListCreate(generics.ListCreateAPIView):

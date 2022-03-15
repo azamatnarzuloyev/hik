@@ -1,4 +1,7 @@
+from asyncore import read
 from multiprocessing import managers
+from unicodedata import category
+
 from rest_framework import serializers
 from . import models
 import json
@@ -8,6 +11,8 @@ class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         fields = "__all__"
         model = models.Brand
+
+
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -35,28 +40,38 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class CategorySerializerMini(CategorySerializer):
     class Meta(CategorySerializer.Meta):
-        fields = ["name"]
+        fields = ['id',"name",'slug']
 
 
 class ProductListMini(serializers.ModelSerializer):
+    categories = CategorySerializerMini(read_only=True)
     image = serializers.SerializerMethodField()
+    # categories = serializers.SerializerMethodField()
+    # def get_categories(self, obj):
+    #     return obj.categories.slug
 
     class Meta:
         model = models.Product
         fields = (
             "id",
             "slug",
+            'categories',
             "name",
             "price",
             "market_price",
             "discount_price",
             "image",
             "image_count",
-            "has_banner_ad",
+            # "has_banner_ad",
+            
            
         )
 
         extra_kwargs = {"price": {"read_only": True}}
+    # def get_categories(self, obj, name):
+    #     objects = obj.categories.get(slug=name)
+    #     data = [(category.name) for category in objects]
+    #     return data
 
     def get_image(self, obj):
         host = self.context.get("request")
@@ -78,22 +93,31 @@ class ProductDetailSerializerMini(ProductListMini):
             "name",
         ]
 
+class CategoryProductSerializer(serializers.ModelSerializer):
+    products = ProductListMini(read_only=True, many=True)
+    class Meta:
+        model = models.Category
+        fields = ("products")
+
 
 class CategoryDetailSerializer(serializers.ModelSerializer):
     products = ProductListMini(read_only=True, many=True)
-
     class Meta:
         model = models.Category
         fields = ("id", "name", "products")
+
     
 
 class ProductListCreate(serializers.ModelSerializer):
     colors = serializers.JSONField(required=False)
     images = ImageSerializer(required=False, read_only=True, many=True)
-    # categories = serializers.SerializerMethodField()
+
     brand = BrandSerializer(read_only=True)
     slug = serializers.ReadOnlyField()
-
+    categories = serializers.SerializerMethodField()
+    def get_categories(self, obj):
+        return obj.categories.name
+    # categories = CategorySerializerMini(read_only=True)
     class Meta:
         model = models.Product
         fields = (
@@ -103,6 +127,7 @@ class ProductListCreate(serializers.ModelSerializer):
             "categories",
             "description",
             "brand",
+            # 'pictures',
             "colors",
             "price",
             "market_price",
@@ -114,13 +139,15 @@ class ProductListCreate(serializers.ModelSerializer):
         )
         extra_kwargs = {"price": {"read_only": True}}
    
-    def get_categories(self, obj):
-        objects = obj.categories.all()
-        data = [(category.name) for category in objects]
-        return data
 
-    def update(self, validated_data, *args, **kwargs):
-        return super().update(validated_data, *args, **kwargs)
+
+    # def get_categories(self, obj):
+    #     objects = obj.categories.all()
+    #     data = [(category.name) for category in objects]
+    #     return data
+
+    # def update(self, validated_data, *args, **kwargs):
+    #     return super().update(validated_data, *args, **kwargs)
 
 
 class BannerAdSerializer(serializers.ModelSerializer):
@@ -140,12 +167,12 @@ class BannerAdSerializer(serializers.ModelSerializer):
             "active",
             "show_prices",
             "order",
-            "thumbnail",
+      
         ]
         extra_kwargs = {
             "image": {"read_only": True},
             "order": {"read_only": True},
-            "thumbnail": {"read_only": True},
+         
         }
 
     def validate(self, data):
@@ -159,3 +186,4 @@ class BannerAdSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(errors)
 
         return super().validate(data)
+

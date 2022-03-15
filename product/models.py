@@ -1,4 +1,5 @@
 from distutils.command.upload import upload
+from tokenize import blank_re
 from django.db import models
 from django.utils.text import slugify
 import random, string
@@ -56,7 +57,7 @@ class Category(MPTTModel):
     """
     name, @products
     """
-
+    
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, null=True, editable=False, blank=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -113,12 +114,8 @@ class Brand(models.Model):
         super().save(*args, **kwargs)
 
 
-# class Image(models.Model):
-#     product = models.ForeignKey(
-#         Product, on_delete= models.CASCADE, null=True, related_name="images"
-#     )
-#     image = models.ImageField(upload_to="products", blank=False, null=True)
 
+    
 
 class Image(models.Model):
     product = models.ForeignKey(
@@ -126,14 +123,17 @@ class Image(models.Model):
     )
     image = models.ImageField(upload_to="products", blank=False, null=True)
 
+    
+  
+
 class Product(models.Model):
     mgpiksel = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     slug = models.SlugField(unique=True, editable=False, null=False, blank=True)
     categories = TreeForeignKey(
         Category,
-        related_name='categories',
-        on_delete=models.SET_NULL,
+        related_name='product_category',
+        on_delete=models.CASCADE,
         null=True,
         blank=True,    
     )
@@ -146,10 +146,9 @@ class Product(models.Model):
     discount_price = models.FloatField(
         max_length=200, default=None, blank=True, null=True
     )
+    # pictures = models.ImageField(upload_to='media/product/firs/', blank=True, null=True)
     image = models.ImageField(upload_to="banners", blank=False, null=True)
-    thumbnail = models.ImageField(
-        upload_to="banners/thumbnails/", blank=True, null=True
-    )
+   
     # picture = models.ImageField(upload_to="image/product")
     colors = models.TextField(default="[]", blank=True, null=True)
     available = models.BooleanField(default=True)
