@@ -152,10 +152,7 @@ class Product(models.Model):
     quantity = models.IntegerField(default=1, null=False, blank=True)
     description = models.TextField(blank=True, null=True)
     brand = models.ForeignKey(Brand, models.CASCADE, blank=True, null=True)
-    price = models.FloatField(
-        max_length=200, blank=False, null=False
-    )
-  
+    price = models.IntegerField()
     # pictures = models.ImageField(upload_to='media/product/firs/', blank=True, null=tru)
     # image = models.ImageField(upload_to="banners", blank=False, null=True)
    
@@ -170,7 +167,7 @@ class Product(models.Model):
     # def __str__(self):
     #     return "%s (%s)" % (self.name, self.pk)
 
- 
+  
 
     @property
     def image(self):
@@ -178,12 +175,11 @@ class Product(models.Model):
         if obj and obj.image:
             return obj.image.url
         return None
-    @property
-    def image_count(self):
-        return self.images.all().count()    
     def image_tag(self):
         return format_html("<img width=100 height=75 style='border-radius: 2px;' src='{}'>".format(self.image))
-  
+    @property
+    def image_count(self):
+        return self.images.all().count()
 
     @property
     def url(self):
