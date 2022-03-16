@@ -18,6 +18,9 @@ from mptt.models import  TreeForeignKey, MPTTModel
 from PIL import Image
 from django.utils.html import format_html
 
+
+
+
 def MakeThumb(instance, thubm_size=((400, 400))):
     img = image.open(instance)
     img.thumbnail(thubm_size, image.ANTIALIAS)
@@ -129,7 +132,7 @@ class Status(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, null=True, editable=False, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    rasm = models.ImageField(upload_to='media/category/',null=True, blank=True )
+    rasm = models.ImageField(upload_to='media/category',null=True, blank=True )
 
     def __str__(self):
         return self.name
@@ -149,12 +152,10 @@ class Product(models.Model):
     quantity = models.IntegerField(default=1, null=False, blank=True)
     description = models.TextField(blank=True, null=True)
     brand = models.ForeignKey(Brand, models.CASCADE, blank=True, null=True)
-    market_price = models.FloatField(
-        max_length=200, default=12, blank=False, null=False
+    price = models.FloatField(
+        max_length=200, blank=False, null=False
     )
-    discount_price = models.FloatField(
-        max_length=200, default=None, blank=True, null=True
-    )
+  
     # pictures = models.ImageField(upload_to='media/product/firs/', blank=True, null=tru)
     # image = models.ImageField(upload_to="banners", blank=False, null=True)
    
@@ -169,12 +170,7 @@ class Product(models.Model):
     # def __str__(self):
     #     return "%s (%s)" % (self.name, self.pk)
 
-    @property
-    def price(self):
-        if self.discount_price and float(self.discount_price) > 0:
-            return self.discount_price
-        else:
-            return self.market_price
+ 
 
     @property
     def image(self):
@@ -182,11 +178,12 @@ class Product(models.Model):
         if obj and obj.image:
             return obj.image.url
         return None
-    def image_tag(self):
-        return format_html("<img width=100 height=75 style='border-radius: 2px;' src='{}'>".format(self.image))
     @property
     def image_count(self):
-        return self.images.all().count()
+        return self.images.all().count()    
+    def image_tag(self):
+        return format_html("<img width=100 height=75 style='border-radius: 2px;' src='{}'>".format(self.image))
+  
 
     @property
     def url(self):

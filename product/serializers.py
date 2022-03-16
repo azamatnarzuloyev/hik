@@ -8,7 +8,7 @@ class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         fields = "__all__"
         model = models.Brand
-
+   
 
 
 
@@ -33,6 +33,8 @@ class CategorySerializer(serializers.ModelSerializer):
         if models.Category.objects.filter(name__iexact=data.strip()).exists():
             raise serializers.ValidationError("This category already exists!")
         return data
+ 
+       
 
 
 class CategorySerializerMini(CategorySerializer):
@@ -55,11 +57,9 @@ class ProductListMini(serializers.ModelSerializer):
             'categories',
             "name",
             "price",
-            "market_price",
-            "discount_price",
             "image",
             "image_count",
-            # "has_banner_ad",
+          
             
            
         )
@@ -131,8 +131,7 @@ class ProductListCreate(serializers.ModelSerializer):
             # 'pictures',
             "colors",
             "price",
-            "market_price",
-            "discount_price",
+         
             "available",
             "images",
             'texttitle',
