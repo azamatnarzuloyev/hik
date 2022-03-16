@@ -16,7 +16,7 @@ from ckeditor.fields import RichTextField
 from mptt.models import  TreeForeignKey, MPTTModel
 # Create your models here.
 from PIL import Image
-
+from django.utils.html import format_html
 
 def MakeThumb(instance, thubm_size=((400, 400))):
     img = image.open(instance)
@@ -156,7 +156,7 @@ class Product(models.Model):
         max_length=200, default=None, blank=True, null=True
     )
     # pictures = models.ImageField(upload_to='media/product/firs/', blank=True, null=tru)
-    image = models.ImageField(upload_to="banners", blank=False, null=True)
+    # image = models.ImageField(upload_to="banners", blank=False, null=True)
    
     # picture = models.ImageField(upload_to="image/product")
     colors = models.TextField(default="[]", blank=True, null=True)
@@ -164,9 +164,10 @@ class Product(models.Model):
     texttitle = RichTextField()
     text = RichTextField()
 
-
-    def __str__(self):
-        return "%s (%s)" % (self.name, self.pk)
+    # def image_tag(self):
+    # 	return format_html("<img width=100 height=75 style='border-radius: 2px;' src='{}'>".format(self.image.url))
+    # def __str__(self):
+    #     return "%s (%s)" % (self.name, self.pk)
 
     @property
     def price(self):
@@ -181,7 +182,8 @@ class Product(models.Model):
         if obj and obj.image:
             return obj.image.url
         return None
-
+    def image_tag(self):
+        return format_html("<img width=100 height=75 style='border-radius: 2px;' src='{}'>".format(self.image))
     @property
     def image_count(self):
         return self.images.all().count()

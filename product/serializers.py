@@ -125,6 +125,7 @@ class ProductListCreate(serializers.ModelSerializer):
             "slug",
             "name",
             "categories",
+            'status',
             "description",
             "brand",
             # 'pictures',
