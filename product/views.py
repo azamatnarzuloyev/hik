@@ -1,4 +1,5 @@
 
+from re import search
 from django.shortcuts import render, get_object_or_404
 
 # from flask import Response
@@ -29,14 +30,15 @@ class ProductFilter(fil.FilterSet):
 
     class Meta:
         model = models.Product
-        fields = ['name','categories','brand','status']
+        fields = ['name','categories__slug','brand','status',]
 
 
-class ProductList(generics.ListAPIView):
-    queryset = models.Product.objects.all()
-    serializer_class = serializers.ProductListCreate
-    filter_backends = (fil.DjangoFilterBackend,)
-    filterset_class = ProductFilter
+# class ProductList(generics.ListAPIView):
+#     queryset = models.Product.objects.all()
+#     serializer_class = serializers.ProductListCreate
+#     filter_backends = (fil.DjangoFilterBackend,)
+#     filterset_class = ProductFilter
+    
      
 
 # class CategoryProductViews(APIView):
@@ -62,11 +64,16 @@ class TopProducts(generics.ListAPIView):
 class ProductListCreate(generics.ListAPIView):
     serializer_class = serializers.ProductListCreate
     queryset = models.Product.objects.all()
-    # filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter]
     # search_fields = ["name"]
     lookup_field = "slug"
+ 
     filter_backends = (fil.DjangoFilterBackend,)
     filterset_class = ProductFilter
+    # search_fields = ('name', 'categories__name')
+    # ordering_fields = ('name', 'categories__name')
+    
+    
     def get(self, request, *args, **kwargs):
         self.serializer_class = serializers.ProductListMini
         return super().get(request, *args, **kwargs)
@@ -88,6 +95,8 @@ class ProductDetail(generics.RetrieveAPIView):
     serializer_class = serializers.ProductListCreate
     queryset = models.Product.objects.all()
     lookup_field = "slug"
+    filter_backends = (fil.DjangoFilterBackend,)
+    filterset_class = ProductFilter
 
 
     # def perform_update(self, serializer):
@@ -117,6 +126,7 @@ class CategoryListCreate(generics.ListAPIView):
     queryset = models.Category.objects.filter(level=0)
     filter_backends = [filters.SearchFilter]
     search_fields = ["name"]
+
 
 
 

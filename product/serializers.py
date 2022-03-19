@@ -48,7 +48,7 @@ class ProductListMini(serializers.ModelSerializer):
     # categories = serializers.SerializerMethodField()
     # def get_categories(self, obj):
     #     return obj.categories.slug
-
+    market_price = serializers.IntegerField(read_only=True)
     class Meta:
         model = models.Product
         fields = (
@@ -59,6 +59,7 @@ class ProductListMini(serializers.ModelSerializer):
             "price",
             "image",
             "image_count",
+            'market_price'
           
             
            
@@ -116,7 +117,7 @@ class ProductListCreate(serializers.ModelSerializer):
     slug = serializers.ReadOnlyField()
     categories = serializers.SerializerMethodField()
     def get_categories(self, obj):
-        return obj.categories.name
+        return obj.categories.slug
     # categories = CategorySerializerMini(read_only=True)
     class Meta:
         model = models.Product

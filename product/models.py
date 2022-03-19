@@ -1,3 +1,4 @@
+from distutils.command.install_egg_info import to_filename
 from distutils.command.upload import upload
 from multiprocessing import parent_process
 from tokenize import blank_re
@@ -146,7 +147,7 @@ class Product(models.Model):
         related_name='product_category',
         on_delete=models.CASCADE,
         null=True,
-        blank=True,    
+        blank=True,  
     )
     status = models.ManyToManyField(Status)
     quantity = models.IntegerField(default=1, null=False, blank=True)
@@ -167,7 +168,8 @@ class Product(models.Model):
     # def __str__(self):
     #     return "%s (%s)" % (self.name, self.pk)
 
-  
+   
+        
 
     @property
     def image(self):

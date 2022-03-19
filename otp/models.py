@@ -90,6 +90,8 @@ class PhoneOTP(models.Model):
 
     def __str__(self):
         return str(self.phone) + ' is sent ' + str(self.otp)
+
+
 class Address(models.Model):
     GENDER_CHOICES = [
         ('F', 'Female'),
