@@ -20,6 +20,7 @@ django-environ = "*"
 environs = {extras = ["django"], version = "*"}
 psycopg2-binary = "*"
 whitenoise = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 
