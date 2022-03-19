@@ -64,7 +64,7 @@ class TopProducts(generics.ListAPIView):
 class ProductListCreate(generics.ListAPIView):
     serializer_class = serializers.ProductListCreate
     queryset = models.Product.objects.all()
-    filter_backends = [filters.SearchFilter]
+    # filter_backends = [filters.SearchFilter]
     # search_fields = ["name"]
     lookup_field = "slug"
  
