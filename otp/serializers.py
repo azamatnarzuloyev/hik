@@ -1,3 +1,4 @@
+
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
@@ -22,7 +23,7 @@ class CreateUserSerialzier(serializers.HyperlinkedModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'phone', 'first_name', 'last_name')
+        fields = ('id', 'phone', 'firs_name', 'last_name')
 
 
     def validate(self, attrs):
@@ -38,7 +39,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.phone = validated_data['phone']
-        instance.first_name = validated_data['firs_name']
+        instance.firs_name = validated_data['firs_name']
         instance.last_name = validated_data['last_name']
         instance.standard = validated_data['standard']
         instance.save()

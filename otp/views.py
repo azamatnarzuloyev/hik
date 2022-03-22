@@ -95,7 +95,7 @@ class SendPhoneOTP(APIView):
             user = User.objects.filter(phone__iexact = phone)
 
             if user.exists():  #this means that the user already exists, no new OTP for them
-                return Response({'status':False, 'detail':'User already exist. Kindly reset your password.'})
+                return Response({'status':False, 'detail':'User already exist. Kindly reset your .'})
 
             else: #if the user doesn't exists 
                 otp = send_otp(phone)
@@ -170,7 +170,7 @@ class ValidateOTP(APIView):
                     old.save()
                     return Response({
                         'status' : True, 
-                        'detail' : 'OTP matched, kindly proceed to save password'
+                        'detail' : 'OTP matched, kindly proceed to save '
                     })
                 else:
                     return Response({
@@ -196,7 +196,7 @@ class ValidateOTP(APIView):
 class Register(APIView):
     # permission_classes_by_action = {'create': [permissions.AllowAny]}
     def post(self, *args, **kwargs):
-        phone = self.request.data.get('phone', False)
+        phone = self.request.data.get('phone',False)
         last_name = self.request.data.get('last_name', False)
         firs_name = self.request.data.get('firs_name', False)
         
@@ -215,7 +215,7 @@ class Register(APIView):
                     old=old.first()
 
                     if old.logged:
-                        temp_data = {'phone':phone,'las_name':last_name, 'firs_name':firs_name}
+                        temp_data = {'phone':phone,'last_name':last_name, 'firs_name':firs_name}
                         serializer = UserSerializer(data=temp_data)
                         serializer.is_valid(raise_exception = True)
                         user = serializer.save()
@@ -278,7 +278,7 @@ class ValidatePhoneLogin(APIView):
                             old.count = old.count+1
                             old.otp = otp
                             old.save()
-                            return Response({'status': True, 'detail': 'OTP has been sent for password reset. Limits about to reach.'})
+                            return Response({'status': True, 'detail': 'OTP has been sent for Limits about to reach.'})
 
                     else:
                         count = 0
@@ -288,7 +288,7 @@ class ValidatePhoneLogin(APIView):
                             otp=otp,
                             count=count,
                             forgot=True)
-                        return Response({'status': True, 'detail': 'OTP has been sent for password reset'})
+                        return Response({'status': True, 'detail': 'OTP has been sent for '})
 
                 else:
                     return Response({
@@ -319,7 +319,7 @@ class ValidateloginOtp(APIView):
                 if old.forgot==False:
                     return Response({
                         'status' : False, 
-                        'detail' : 'This phone has not received valid otp for forgot password. Request a new otp or contact help centre.'
+                        'detail' : 'This phone has not received valid otp for Request a new otp or contact help centre.'
                     })
 
                 else:
@@ -330,7 +330,7 @@ class ValidateloginOtp(APIView):
                         old.save()
                         return Response({
                         'status' : True, 
-                        'detail' : 'OTP matched, kindly proceed to create new password'
+                        'detail' : 'OTP matched, kindly proceed to create new '
                         })
 
                     else:

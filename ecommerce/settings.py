@@ -66,7 +66,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -118,6 +118,14 @@ DATABASES = {
 #   } 
 
 
+from datetime import timedelta
+
+REST_KNOX = {
+    'USER_SERIALIZER' : 'otp.serializers.UserSerializer',
+    'TOKEN_TTL' : timedelta(hours = 24*7),
+}
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -148,6 +156,7 @@ USE_I18N = True
 
 USE_TZ = True
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES' : ('knox.auth.TokenAuthentication', ),
     # 'DEFAULT_AUTHENTICATION_CLASSES': (
     #     'rest_framework.authentication.SessionAuthentication',
     #     'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -171,7 +180,16 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 5
     # 'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES' : ('knox.auth.TokenAuthentication', ),
+}
 
+from datetime import timedelta
+
+REST_KNOX = {
+    'USER_SERIALIZER' : 'custom_users.serializers.UserSerializer',
+    'TOKEN_TTL' : timedelta(hours = 24*7),
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/

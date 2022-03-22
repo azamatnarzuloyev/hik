@@ -25,7 +25,7 @@ urlpatterns = [
 	# path('update_profile/<int:pk>/', UpdateProfileView.as_view()),
 
 	path('ValidatePhoneLogin/', ValidatePhoneLogin.as_view()),
-	path('alidateloginOtp/', ValidateloginOtp.as_view()),
+	path('validateloginOtp/', ValidateloginOtp.as_view()),
 	# path('change_forgot_password/', ForgotPasswordChange.as_view())
 
 ]
