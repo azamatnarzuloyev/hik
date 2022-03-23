@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-from environ import Env
+from environs import Env
 env = Env()
 env.read_env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -97,12 +97,17 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# DATABASES = {
+#     "default": env.dj_db_url("DATABASE_URL")
+# }
+# DATABASES = {"default": env.dj_db_url("DATABASE_URL")}
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -113,10 +118,9 @@ DATABASES = {
 #         'PORT': '',
 #     }
 # }
-# DATABASES = {
-#     'default': env.dj_db_url("DATABASE_URL")
-        
-#   } 
+DATABASES = {
+    "default": env.dj_db_url("DATABASE_URL")      
+  } 
 
 
 
@@ -164,21 +168,21 @@ REST_FRAMEWORK = {
     #     'rest_framework.filters.SearchFilter',
     #     'rest_framework.filters.OrderingFilter',
     # ),
-    # 'TEST_REQUEST_RENDERER_CLASSES': (
-    #     'rest_framework.renderers.MultiPartRenderer',
-    #     'rest_framework.renderers.JSONRenderer',
-    #     'rest_framework.renderers.TemplateHTMLRenderer',
-    # ),
+    'TEST_REQUEST_RENDERER_CLASSES': (
+        'rest_framework.renderers.MultiPartRenderer',
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.TemplateHTMLRenderer',
+    ),
 
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 5
+    'PAGE_SIZE': 1
     # 'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 AUTH_USER_MODEL = 'otp.User'
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES' : ('knox.auth.TokenAuthentication', ),
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES' : ('knox.auth.TokenAuthentication', ),
+# }
 
 from datetime import timedelta
 

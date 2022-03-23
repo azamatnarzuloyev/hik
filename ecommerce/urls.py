@@ -31,7 +31,7 @@ urlpatterns = [
    path('api/v1/', include("product.urls")),
    path("api/v1/search/", include("search.urls")),
     # path('', include('checkout.urls')),
-   path('api/v1/', include('otp.urls')),
+   path('api/v1/otp/', include('otp.urls')),
    path('api/v1/orders/', include('order.urls')),
    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0),  name='schema-redoc')

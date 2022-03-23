@@ -62,7 +62,7 @@ class Refund(models.Model):
     order = models.OneToOneField('Order', on_delete=models.CASCADE)
     reason = models.TextField()
     accepted = models.BooleanField(default=False)
-    email = models.EmailField()
+    phone = models.CharField(max_length=15)
 
     def __str__(self):
-        return self.email
+        return self.phone
