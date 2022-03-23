@@ -115,10 +115,10 @@ class ProductListCreate(serializers.ModelSerializer):
     status = StatuSerializer(read_only=True)
     brand = BrandSerializer(read_only=True)
     slug = serializers.ReadOnlyField()
-    categories = serializers.SerializerMethodField()
-    def get_categories(self, obj):
-        return obj.categories.slug
-    # categories = CategorySerializerMini(read_only=True)
+    # categories = serializers.SerializerMethodField()
+    # def get_categories(self, obj):
+    #     return obj.categories.slug
+    categories = CategorySerializerMini(read_only=True)
     class Meta:
         model = models.Product
         fields = (

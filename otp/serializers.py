@@ -1,4 +1,3 @@
-
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
@@ -23,7 +22,7 @@ class CreateUserSerialzier(serializers.HyperlinkedModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'phone', 'firs_name', 'last_name')
+        fields = ('id', 'phone', 'name', 'first_login', 'standard', 'score' )
 
 
     def validate(self, attrs):
@@ -39,9 +38,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.phone = validated_data['phone']
-        instance.firs_name = validated_data['firs_name']
-        instance.last_name = validated_data['last_name']
+        instance.name = validated_data['name']
         instance.standard = validated_data['standard']
+        instance.score = validated_data['score']
+
         instance.save()
         return instance
 
@@ -50,17 +50,17 @@ class UserSerializer(serializers.ModelSerializer):
 
 class LoginUserSerializer(serializers.Serializer):
     phone = serializers.CharField()
-    # password = serializers.CharField(
-    #     style={'input_type': 'password'}, trim_whitespace=False)
+    password = serializers.CharField(
+        style={'input_type': 'password'}, trim_whitespace=False)
 
 
     def validate(self, attrs):
         phone = attrs.get('phone')
-        # password = attrs.get('password')
+        password = attrs.get('password')
 
-        if phone:
+        if phone and password:
             if User.objects.filter(phone=phone).exists():
-                user = authenticate(request=self.context.get('request'), phone=phone)
+                user = authenticate(request=self.context.get('request'), phone=phone, password=password)
 
             else:
                 msg = {'detail': 'Phone number is not registered.','register': False}
@@ -74,30 +74,30 @@ class LoginUserSerializer(serializers.Serializer):
 
 
 
-# class ChangePasswordSerializer(serializers.HyperlinkedModelSerializer):
-#     old_password = serializers.CharField(write_only=True, required=True)
-#     password = serializers.CharField(write_only=True, required=True, trim_whitespace=False)
+class ChangePasswordSerializer(serializers.HyperlinkedModelSerializer):
+    old_password = serializers.CharField(write_only=True, required=True)
+    password = serializers.CharField(write_only=True, required=True, trim_whitespace=False)
 
-#     class Meta:
-#         model=User
-#         fields = ('old_password','password')
-
-
-#     def validate_old_password(self, value):
-#         user = self.context['request'].user
-#         if not user.check_password(value):
-#             raise serializers.ValidationError({'old_password':"Old password is not correct"})
-#         return value
+    class Meta:
+        model=User
+        fields = ('old_password','password')
 
 
-#     def update(self, instance, validated_data):
-#         instance.set_password(validated_data['password'])
-#         instance.save()
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError({'old_password':"Old password is not correct"})
+        return value
 
-#         return instance
+
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data['password'])
+        instance.save()
+
+        return instance
 
 
 
-# class ForgotPasswordSerializer(serializers.Serializer):
-#     phone = serializers.CharField(required=True)
-#     password = serializers.CharField(required=True)
+class ForgotPasswordSerializer(serializers.Serializer):
+    phone = serializers.CharField(required=True)
+    password = serializers.CharField(required=True)

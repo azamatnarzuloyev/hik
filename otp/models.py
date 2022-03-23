@@ -5,19 +5,19 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.validators import RegexValidator
 from django.db.models import Q
 
-# import random
-# import os
-# import requests
+import random
+import os
+import requests
 
 
 
 class CustomUserManager(BaseUserManager):
-	def create_user(self, phone, password=None):
+	def create_user(self, phone,  password=None):
 		if not phone:
 			raise ValueError('User must have a phone number')
 		if not password:
 			raise ValueError('User must have a password')
-
+        
 		user = self.model(phone=phone)
 		user.set_password(password)
 		user.is_staff=False
@@ -34,15 +34,16 @@ class CustomUserManager(BaseUserManager):
 		user.save(using=self._db)
 		return user
 
-# regex   =r'^\+?1?\d{9,14}$',
+
 
 class User(AbstractBaseUser):
     phone_regex = RegexValidator( regex   =r'^\+?1?\d{9,14}$', message ="Phone number must be entered in the format: '+999999999'. Up to 14 digits allowed.")
     phone       = models.CharField(validators=[phone_regex], max_length=17, unique=True)
-    firs_name        = models.CharField(max_length = 20, blank = True, null = True)
-    last_name        = models.CharField(max_length = 20, blank = True, null = True)
-    # standard    = models.CharField(max_length = 3, blank = True, null = True)
-    # score       = models.IntegerField(default = 16)
+    name        = models.CharField(max_length = 20, blank = True, null = True)
+    # first_name = models.CharField(max_length=100)
+    # last_name = models.CharField(max_length=200)
+    standard    = models.CharField(max_length = 3, blank = True, null = True)
+    score       = models.IntegerField(default = 16)
 
     first_login = models.BooleanField(default=False)
     
@@ -56,7 +57,7 @@ class User(AbstractBaseUser):
     objects = CustomUserManager()
     USERNAME_FIELD = 'phone'
     # REQUIRED_FIELDS = []
-
+    # REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __str__(self):
     	return self.phone
@@ -70,6 +71,9 @@ class User(AbstractBaseUser):
     # @property
     # def is_staff(self):
     #     return self.is_admin
+    # @property
+    # def full_name(self):
+    #     return self.first_name + ' ' + self.last_name
 
 
 
@@ -78,7 +82,7 @@ class User(AbstractBaseUser):
 
 
 class PhoneOTP(models.Model):
-    phone_regex = RegexValidator( regex   =r'^\+?1?\d{9,14}$', message ="Phone number must be entered in the format: '+990167647'. Up to 14 digits allowed.")
+    phone_regex = RegexValidator( regex   =r'^\+?1?\d{9,14}$', message ="Phone number must be entered in the format: '+999999999'. Up to 14 digits allowed.")
     phone       = models.CharField(validators=[phone_regex], max_length=17, unique=True)
     otp         = models.CharField(max_length = 9, blank = True, null= True)
 
@@ -90,7 +94,6 @@ class PhoneOTP(models.Model):
 
     def __str__(self):
         return str(self.phone) + ' is sent ' + str(self.otp)
-
 
 class Address(models.Model):
     GENDER_CHOICES = [
@@ -114,6 +117,5 @@ class Address(models.Model):
     class Meta:
         verbose_name_plural = 'Addresses'
 
-    def __str__(self):
-        return self.user.first_name
-
+    # def __str__(self):
+    #     return self.user.first_name

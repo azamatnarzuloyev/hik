@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'knox',
     'django_filters',
     'django_countries',
+    'drf_yasg',
     'ckeditor',
     'product',
     'search',
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     'otp',
 ]
 CORS_ORIGIN_ALLOW_ALL = True
+# This
 CORS_ORIGIN_WHITELIST = [
     'http://buyy.herokuapp.com',
     'https://buyy.herokuapp.com',
@@ -118,12 +120,6 @@ DATABASES = {
 #   } 
 
 
-from datetime import timedelta
-
-REST_KNOX = {
-    'USER_SERIALIZER' : 'otp.serializers.UserSerializer',
-    'TOKEN_TTL' : timedelta(hours = 24*7),
-}
 
 
 # Password validation
@@ -169,17 +165,18 @@ REST_FRAMEWORK = {
     #     'rest_framework.filters.SearchFilter',
     #     'rest_framework.filters.OrderingFilter',
     # ),
-    'TEST_REQUEST_RENDERER_CLASSES': (
-        'rest_framework.renderers.MultiPartRenderer',
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.TemplateHTMLRenderer',
-    ),
+    # 'TEST_REQUEST_RENDERER_CLASSES': (
+    #     'rest_framework.renderers.MultiPartRenderer',
+    #     'rest_framework.renderers.JSONRenderer',
+    #     'rest_framework.renderers.TemplateHTMLRenderer',
+    # ),
 
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 5
     # 'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
+AUTH_USER_MODEL = 'otp.User'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES' : ('knox.auth.TokenAuthentication', ),
 }
@@ -187,7 +184,7 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 REST_KNOX = {
-    'USER_SERIALIZER' : 'custom_users.serializers.UserSerializer',
+    'USER_SERIALIZER' : 'otp.serializers.UserSerializer',
     'TOKEN_TTL' : timedelta(hours = 24*7),
 }
 
@@ -201,7 +198,7 @@ MEDIA_ROOT = "media"
 MEDIA_ROOT = str(BASE_DIR.joinpath('media'))
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-AUTH_USER_MODEL = 'otp.User'
+
 # STATICFILES_STORAGE ='whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type

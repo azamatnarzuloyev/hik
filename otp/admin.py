@@ -5,8 +5,8 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import PhoneOTP, Address
-admin.site.register(Address)
+from .models import Address, PhoneOTP
+
 admin.site.register(PhoneOTP)
 
 
@@ -15,11 +15,11 @@ class UserAdmin(admin.ModelAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('password', 'phone',   'is_admin', 'last_name', 'firs_name')
-    list_filter = ('is_active' ,'is_admin' )
+    list_display = ('name', 'phone', 'standard',  'is_admin')
+    list_filter = ('standard','is_staff','is_active' ,'is_admin', )
     fieldsets = (
-        (None, {'fields': ('phone','password')}),
-        ('Personal info', {'fields': ('firs_name', 'last_name')}),
+        (None, {'fields': ('phone', 'password')}),
+        ('Personal info', {'fields': ('name', 'standard','score',)}),
         ('Permissions', {'fields': ('is_admin','is_staff','is_active')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -27,18 +27,21 @@ class UserAdmin(admin.ModelAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('phone')}
+            'fields': ('phone', 'password1', 'password2')}
         ),
     )
 
 
-    search_fields = ('phone','firs_name', 'last_name')
-    ordering = ('phone','firs_name', 'last_name')
+    search_fields = ('phone','name')
+    ordering = ('phone','name')
     filter_horizontal = ()
 
 
 
 admin.site.register(User, UserAdmin)
 
+
+
 # Remove Group Model from admin. We're not using it.
 admin.site.unregister(Group)
+admin.site.register(Address)

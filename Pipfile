@@ -21,6 +21,9 @@ environs = {extras = ["django"], version = "*"}
 psycopg2-binary = "*"
 whitenoise = "*"
 djangorestframework-simplejwt = "*"
+pyyaml = "*"
+uritemplate = "*"
+drf-yasg = "*"
 
 [dev-packages]
 

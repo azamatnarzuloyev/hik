@@ -150,7 +150,7 @@ class Product(models.Model):
         blank=True,  
     )
     status = models.ManyToManyField(Status)
-    quantity = models.IntegerField(default=1, null=False, blank=True)
+    quantit = models.IntegerField(default=1, null=False, blank=True)
     description = models.TextField(blank=True, null=True)
     brand = models.ForeignKey(Brand, models.CASCADE, blank=True, null=True)
     price = models.IntegerField()
