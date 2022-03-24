@@ -1,7 +1,7 @@
 
-from re import search
-from django.shortcuts import render, get_object_or_404
 
+from django.shortcuts import render, get_object_or_404
+from .paginations import CustomPagination
 # from flask import Response
 from rest_framework.views import APIView
 from rest_framework import generics, response, status, views, permissions
@@ -15,7 +15,7 @@ from .utils import (
     addProductBrand,
     buildImage,
 )
-from rest_framework import filters
+from rest_framework import filters ,pagination
 import datetime
 from django.core.mail import send_mail
 import threading, json
@@ -72,7 +72,7 @@ class ProductListCreate(generics.ListAPIView):
     filterset_class = ProductFilter
     # search_fields = ('name', 'categories__name')
     # ordering_fields = ('name', 'categories__name')
-    
+    pagination_class = CustomPagination
     
     def get(self, request, *args, **kwargs):
         self.serializer_class = serializers.ProductListMini
@@ -97,7 +97,7 @@ class ProductDetail(generics.RetrieveAPIView):
     lookup_field = "slug"
     filter_backends = (fil.DjangoFilterBackend,)
     filterset_class = ProductFilter
-
+    
 
     # def perform_update(self, serializer):
     #     brand_data = self.request.data.get("brand")

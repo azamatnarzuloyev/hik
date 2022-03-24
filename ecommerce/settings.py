@@ -167,15 +167,15 @@ REST_FRAMEWORK = {
     #     'rest_framework.filters.SearchFilter',
     #     'rest_framework.filters.OrderingFilter',
     # ),
-    'TEST_REQUEST_RENDERER_CLASSES': (
-        'rest_framework.renderers.MultiPartRenderer',
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.TemplateHTMLRenderer',
-    ),
+    # 'TEST_REQUEST_RENDERER_CLASSES': (
+    #     'rest_framework.renderers.MultiPartRenderer',
+    #     'rest_framework.renderers.JSONRenderer',
+    #     'rest_framework.renderers.TemplateHTMLRenderer',
+    # ),
 
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 1
+    'PAGE_SIZE': 3
     # 'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 AUTH_USER_MODEL = 'otp.User'
