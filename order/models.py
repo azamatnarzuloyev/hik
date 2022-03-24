@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
 from otp.models import User,Address
-
+from ecommerce.settings import AUTH_USER_MODEL
 
 from product.models import Product
 
@@ -10,7 +10,7 @@ class OrderProduct(models.Model):
     '''
     Model to choose a product and quantity
     '''
-    user = user = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id')
+    user  = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, to_field='id')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1, blank=True)
     ordered = models.BooleanField(default=False, blank=True)
@@ -24,7 +24,7 @@ class OrderProduct(models.Model):
 
 class Order(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id')
+    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, to_field='id')
     ref_code = models.CharField(max_length=250, blank=True, null=True)
     shipping_address = models.ForeignKey(Address, on_delete=models.SET_NULL, blank=True, null=True)
     payment = models.ForeignKey('Payment', on_delete=models.SET_NULL, blank=True, null=True)
@@ -50,7 +50,7 @@ class Order(models.Model):
 
 class Payment(models.Model):
     paystack_id = models.CharField(max_length=60)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
     amount = models.FloatField()
     timestamp = models.DateTimeField(auto_now_add=True)
 

@@ -25,6 +25,13 @@ from .serializers import (CreateUserSerialzier,
                         ForgotPasswordSerializer)
 
 
+class UserProfile(generics.ListAPIView):
+    '''Returns the requesting user's profile'''
+    serializer_class = UserSerializer
+
+    def get(self, request):
+        serializer = self.serializer_class(request.user, many=False)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 class LoginAPI(KnoxLoginView):
     permission_classes = (permissions.AllowAny, )

@@ -1,5 +1,7 @@
 from django.urls import path, include, re_path
 from .views import (SendPhoneOTP, 
+
+                    UserProfile,
 					ValidateOTP, 
 					Register, 
 					LoginAPI, 
@@ -13,7 +15,7 @@ from knox import views as knox_views
 app_name = "otp"
 
 urlpatterns = [
-
+    path('profile/', UserProfile.as_view(), name='profile'),
 	path('sendotp/', SendPhoneOTP.as_view()),
 	path('validateotp/', ValidateOTP.as_view()),
 	path('register/', Register.as_view()),

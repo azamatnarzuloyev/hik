@@ -12,7 +12,7 @@ import requests
 
 
 class CustomUserManager(BaseUserManager):
-	def create_user(self, phone,  password=None):
+	def create_user(self, phone ,password=None):
 		if not phone:
 			raise ValueError('User must have a phone number')
 		if not password:
@@ -40,8 +40,8 @@ class User(AbstractBaseUser):
     phone_regex = RegexValidator( regex   =r'^\+?1?\d{9,14}$', message ="Phone number must be entered in the format: '+999999999'. Up to 14 digits allowed.")
     phone       = models.CharField(validators=[phone_regex], max_length=17, unique=True)
     name        = models.CharField(max_length = 20, blank = True, null = True)
-    # first_name = models.CharField(max_length=100)
-    # last_name = models.CharField(max_length=200)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=200)
     standard    = models.CharField(max_length = 3, blank = True, null = True)
     score       = models.IntegerField(default = 16)
 
@@ -57,7 +57,6 @@ class User(AbstractBaseUser):
     objects = CustomUserManager()
     USERNAME_FIELD = 'phone'
     # REQUIRED_FIELDS = []
-    # REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __str__(self):
     	return self.phone
@@ -71,9 +70,7 @@ class User(AbstractBaseUser):
     # @property
     # def is_staff(self):
     #     return self.is_admin
-    # @property
-    # def full_name(self):
-    #     return self.first_name + ' ' + self.last_name
+
 
 
 
