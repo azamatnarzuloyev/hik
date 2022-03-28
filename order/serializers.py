@@ -4,7 +4,7 @@ from rest_framework import serializers
 from django_countries.serializers import CountryFieldMixin
 
 from order.models import OrderProduct, Order, Payment, Refund
-from otp.models import Address
+from account.models import Address
 
 class AddressSerializer(CountryFieldMixin, serializers.ModelSerializer):
     class Meta:

@@ -1,6 +1,6 @@
 import uuid
 from django.db import models
-from otp.models import User,Address
+from account.models import User, Address
 from ecommerce.settings import AUTH_USER_MODEL
 
 from product.models import Product

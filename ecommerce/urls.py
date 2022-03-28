@@ -6,7 +6,11 @@ from django.conf.urls.static import static
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-
+from decouple import config
+from rest_framework_simplejwt.views import (
+    TokenRefreshView,
+    TokenVerifyView
+)
 
 admin.autodiscover()
 admin.site.enable_nav_sidebar = False
@@ -29,11 +33,26 @@ urlpatterns = [
   
    path('admin/', admin.site.urls),
    path('api/v1/', include("product.urls")),
+   path('account/', include('account.urls', namespace='account')),
+   path('blog/', include('blog.urls', namespace='blog')),
+   path('comment/', include('comment.urls', namespace='comment')),
+   path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+   path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
    path("api/v1/search/", include("search.urls")),
-    # path('', include('checkout.urls')),
-   path('api/v1/otp/', include('otp.urls')),
    path('api/v1/orders/', include('order.urls')),
    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-   path('redoc/', schema_view.with_ui('redoc', cache_timeout=0),  name='schema-redoc')
+   path('redoc/', schema_view.with_ui('redoc', cache_timeout=0),  name='schema-redoc'),
   
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
+#+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+from django.conf.urls.static import static
+from django.conf import settings
+
+    # add root static files
+urlpatterns = urlpatterns + static(
+        settings.STATIC_URL, document_root=settings.STATIC_ROOT
+    )
+    # add media static files
+urlpatterns = urlpatterns + static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )

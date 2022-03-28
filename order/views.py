@@ -7,7 +7,7 @@ import order.serializers as serializers
 from order.models import OrderProduct, Order, Payment, Refund
 
 from product.models import Product
-from otp.models import Address
+from account.models import Address
 from util.paystack import Transaction, verify_payment
 
 class OrderSummaryView(generics.ListAPIView):

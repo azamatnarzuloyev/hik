@@ -24,6 +24,10 @@ djangorestframework-simplejwt = "*"
 pyyaml = "*"
 uritemplate = "*"
 drf-yasg = "*"
+drf-spectacular = "*"
+drf-spectacular-sidecar = "*"
+pyjwt = "*"
+python-decouple = "*"
 
 [dev-packages]
 
