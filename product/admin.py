@@ -2,6 +2,7 @@
 # from tkinter import Image
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
+from product.calculator import Doller
 from . import models
 from .models import Category, Status
 # Register your models here.
@@ -9,6 +10,7 @@ from .models import Category, Status
 admin.site.register(Category, MPTTModelAdmin)
 admin.site.register(models.Brand)
 admin.site.register(Status)
+admin.site.register(Doller)
 
 class GalleryInlines(admin.TabularInline):
     model = models.Image

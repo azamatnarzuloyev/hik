@@ -1,7 +1,10 @@
+from cgi import print_exception
 from distutils.command.install_egg_info import to_filename
 from distutils.command.upload import upload
+from itertools import product
 from multiprocessing import parent_process
 from tokenize import blank_re
+from winreg import KEY_ENUMERATE_SUB_KEYS
 from django.db import models
 from django.utils.text import slugify
 import random, string
@@ -18,7 +21,7 @@ from mptt.models import  TreeForeignKey, MPTTModel
 # Create your models here.
 from PIL import Image
 from django.utils.html import format_html
-
+from .calculator import Doller
 
 
 
@@ -138,6 +141,9 @@ class Status(models.Model):
     def __str__(self):
         return self.name
 
+# class Doller(models.Model):
+#     kurs  = models.IntegerField(default=11900)
+
 class Product(models.Model):
     mgpiksel = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=200, blank=False, null=False)
@@ -154,19 +160,24 @@ class Product(models.Model):
     description = models.TextField(blank=True, null=True)
     brand = models.ForeignKey(Brand, models.CASCADE, blank=True, null=True)
     price = models.IntegerField()
-    # pictures = models.ImageField(upload_to='media/product/firs/', blank=True, null=tru)
     # image = models.ImageField(upload_to="banners", blank=False, null=True)
-   
-    # picture = models.ImageField(upload_to="image/product")
     colors = models.TextField(default="[]", blank=True, null=True)
     available = models.BooleanField(default=True)
     texttitle = RichTextField()
     text = RichTextField()
-
-    # def image_tag(self):
-    # 	return format_html("<img width=100 height=75 style='border-radius: 2px;' src='{}'>".format(self.image.url))
-    # def __str__(self):
-    #     return "%s (%s)" % (self.name, self.pk)
+    
+    @property
+    def market_price(self):
+        if self.price:
+            return int(self.price)
+     
+     
+    @property
+    def products(self):
+        return Doller.objects.get(kurs=self.kurs)
+   
+     
+    
 
    
         
@@ -214,11 +225,7 @@ class Product(models.Model):
     class Meta:
         ordering = ["-pk", "name"]
         
-# class Image(models.Model):
-#     product = models.ForeignKey(
-#         Product, on_delete= models.CASCADE,  related_name="images"
-#     )
-#     image = models.ImageField(upload_to="products", blank=False, null=True)
+
 
 
 

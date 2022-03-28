@@ -70,14 +70,15 @@ class ProductListCreate(generics.ListAPIView):
  
     filter_backends = (fil.DjangoFilterBackend,)
     filterset_class = ProductFilter
+    pagination_class = CustomPagination
     # search_fields = ('name', 'categories__name')
     # ordering_fields = ('name', 'categories__name')
-    pagination_class = CustomPagination
+   
     
     def get(self, request, *args, **kwargs):
         self.serializer_class = serializers.ProductListMini
         return super().get(request, *args, **kwargs)
-
+    # pagination_class = CustomPagination
     # def perform_create(self, serializer):
     #     category_data = self.request.data.get("categories")
     #     brand_data = self.request.data.get("brand")

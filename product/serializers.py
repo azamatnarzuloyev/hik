@@ -1,4 +1,7 @@
 
+from asyncore import read
+from itertools import product
+from .models import Doller
 from rest_framework import serializers
 from . import models
 import json
@@ -48,7 +51,7 @@ class ProductListMini(serializers.ModelSerializer):
     # categories = serializers.SerializerMethodField()
     # def get_categories(self, obj):
     #     return obj.categories.slug
-    market_price = serializers.IntegerField(read_only=True)
+ 
     class Meta:
         model = models.Product
         fields = (
@@ -59,7 +62,7 @@ class ProductListMini(serializers.ModelSerializer):
             "price",
             "image",
             "image_count",
-            'market_price'
+      
           
             
            
@@ -108,6 +111,10 @@ class StatuSerializer(serializers.ModelSerializer):
         model = models.Status
         fields= "__all__"
     
+class Dollerserializers(serializers.ModelSerializer):
+    class Meta:
+        model = models.Doller
+        fields = "__all__"
 
 class ProductListCreate(serializers.ModelSerializer):
     colors = serializers.JSONField(required=False)
@@ -115,9 +122,11 @@ class ProductListCreate(serializers.ModelSerializer):
     status = StatuSerializer(read_only=True)
     brand = BrandSerializer(read_only=True)
     slug = serializers.ReadOnlyField()
+
     # categories = serializers.SerializerMethodField()
     # def get_categories(self, obj):
     #     return obj.categories.slug
+    market_price =serializers.IntegerField(read_only=True)
     categories = CategorySerializerMini(read_only=True)
     class Meta:
         model = models.Product
@@ -129,26 +138,16 @@ class ProductListCreate(serializers.ModelSerializer):
             'status',
             "description",
             "brand",
-            # 'pictures',
+            'market_price',
             "colors",
             "price",
-         
             "available",
             "images",
             'texttitle',
             'text',
         )
         extra_kwargs = {"price": {"read_only": True}}
-   
 
-
-    # def get_categories(self, obj):
-    #     objects = obj.categories.all()
-    #     data = [(category.name) for category in objects]
-    #     return data
-
-    # def update(self, validated_data, *args, **kwargs):
-    #     return super().update(validated_data, *args, **kwargs)
 
 
 class BannerAdSerializer(serializers.ModelSerializer):
