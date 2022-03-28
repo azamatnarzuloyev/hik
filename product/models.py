@@ -1,10 +1,4 @@
-from cgi import print_exception
-from distutils.command.install_egg_info import to_filename
-from distutils.command.upload import upload
-from itertools import product
-from multiprocessing import parent_process
-from tokenize import blank_re
-from winreg import KEY_ENUMERATE_SUB_KEYS
+
 from django.db import models
 from django.utils.text import slugify
 import random, string
