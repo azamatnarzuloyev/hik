@@ -2,7 +2,14 @@
 from rest_framework import serializers
 from . import models
 
-
+# class StatuSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = models.Status
+#         fields= "__all__"
+#     def validate_name(self, data):
+#         if models.Status.objects.filter(name__iexact=data.strip()).exists():
+#             raise serializers.ValidationError("This category already exists!")
+#         return data
 
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
@@ -45,31 +52,31 @@ class CategorySerializerMini(CategorySerializer):
 class ProductListMini(serializers.ModelSerializer):
     categories = CategorySerializerMini(read_only=True)
     image = serializers.SerializerMethodField()
-    # categories = serializers.SerializerMethodField()
-    # def get_categories(self, obj):
-    #     return obj.categories.slug
+    status = serializers.SerializerMethodField()
+
+  
  
     class Meta:
         model = models.Product
         fields = (
             "id",
-            "slug",
-            'categories',
             "name",
+            "slug",
+            'mgpiksel',
+            'status',
+            'categories',
             "price",
             "image",
-            "image_count",
-      
-          
-            
-           
+            "image_count",   
         )
+    def get_status(self, obj):
+        objects = obj.status.all()
+        data = [(status.slug) for status in objects]
+        return data
+
 
         extra_kwargs = {"price": {"read_only": True}}
-    # def get_categories(self, obj, name):
-    #     objects = obj.categories.get(slug=name)
-    #     data = [(category.name) for category in objects]
-    #     return data
+
 
     def get_image(self, obj):
         host = self.context.get("request")
@@ -104,14 +111,7 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
         model = models.Category
         fields = ("id", "name", "products")
 
-class StatuSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Status
-        fields= "__all__"
-    def validate_name(self, data):
-        if models.Status.objects.filter(name__iexact=data.strip()).exists():
-            raise serializers.ValidationError("This category already exists!")
-        return data
+
 
     
 
@@ -131,6 +131,7 @@ class ProductListCreate(serializers.ModelSerializer):
             "id",
             "slug",
             "name",
+            'mgpiksel',
             "categories",
             'status',
             "description",
@@ -147,7 +148,7 @@ class ProductListCreate(serializers.ModelSerializer):
 
     def get_status(self, obj):
         objects = obj.status.all()
-        data = [(status.name) for status in objects]
+        data = [(status.slug) for status in objects]
         return data
 
 class BannerAdSerializer(serializers.ModelSerializer):

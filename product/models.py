@@ -169,8 +169,8 @@ class Product(models.Model):
         Category,
         related_name='product_category',
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,  
+        # null=True,
+        # blank=True,  
     )
     status = models.ManyToManyField(Status)
     quantit = models.IntegerField(default=1, null=False, blank=True)

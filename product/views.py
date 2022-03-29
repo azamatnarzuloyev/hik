@@ -30,7 +30,7 @@ class ProductFilter(fil.FilterSet):
 
     class Meta:
         model = models.Product
-        fields = ['name','categories__slug','brand','status__slug',]
+        fields = ['name','categories__slug','brand','status__slug',  'mgpiksel',]
 
 
 # class ProductList(generics.ListAPIView):
@@ -70,7 +70,7 @@ class ProductListCreate(generics.ListAPIView):
  
     filter_backends = (fil.DjangoFilterBackend,)
     filterset_class = ProductFilter
-    pagination_class = CustomPagination
+    # pagination_class = CustomPagination
     # search_fields = ('name', 'categories__name')
     # ordering_fields = ('name', 'categories__name')
    

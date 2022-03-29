@@ -33,7 +33,7 @@ urlpatterns = [
   
    path('admin/', admin.site.urls),
    path('api/v1/', include("product.urls")),
-   path('account/', include('account.urls', namespace='account')),
+   path('api/v1/account/', include('account.urls', namespace='account')),
    path('blog/', include('blog.urls', namespace='blog')),
    path('comment/', include('comment.urls', namespace='comment')),
    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
