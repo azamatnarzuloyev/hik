@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.core.validators import ValidationError
 from django.utils.text import gettext_lazy as _
 from PIL import Image as image
-from io import StringIO, BytesIO
+from io import  BytesIO
 from django.core.files.base import ContentFile
 import os.path
 from ckeditor.fields import RichTextField
@@ -15,7 +15,7 @@ from mptt.models import  TreeForeignKey, MPTTModel
 # Create your models here.
 from PIL import Image
 from django.utils.html import format_html
-from .calculator import Doller
+
 
 
 
@@ -127,16 +127,39 @@ class Image(models.Model):
 
     
 class Status(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, blank=False, null=False, unique=True)
     slug = models.SlugField(unique=True, null=True, editable=False, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    rasm = models.ImageField(upload_to='media/category',null=True, blank=True )
+
+   
+
+    class Meta:
+        verbose_name_plural = "statuss"
+        ordering = ["pk", "name"]
 
     def __str__(self):
         return self.name
 
-# class Doller(models.Model):
-#     kurs  = models.IntegerField(default=11900)
+    @classmethod
+    def make_slug(cls, name):
+        slug = slugify(name, allow_unicode=False)
+        letters = string.ascii_letters + string.digits
+
+        while cls.objects.filter(slug=slug).exists():
+            slug = slugify(
+                name + "-" + "".join(random.choices(letters, k=6)), allow_unicode=False
+            )
+        return slug
+
+
+    def save(self, *args, **kwargs):
+        self.name = self.name.title() if self.name else self.name
+        self.slug = self.make_slug(self.name)
+
+        super().save(*args, **kwargs)
+
+
+
 
 class Product(models.Model):
     mgpiksel = models.IntegerField(blank=True, null=True)
@@ -160,20 +183,8 @@ class Product(models.Model):
     texttitle = RichTextField()
     text = RichTextField()
     
-    @property
-    def market_price(self):
-        if self.price:
-            return int(self.price)
-     
-     
-    @property
-    def products(self):
-        return Doller.objects.get(kurs=self.kurs)
-   
-     
-    
 
-   
+
         
 
     @property

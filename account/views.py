@@ -36,20 +36,21 @@ class UsersList(ListAPIView):
     """
 
     serializer_class = UsersListSerializer
-    permission_classes = [
-        IsSuperUser,
-    ]
+    # permission_classes = [
+    #     IsSuperUser,
+    # ]
     filterset_fields = [
-        "author",
+        # "author",
+        'phone',
     ]
-    search_fields = [
-        "phone",
-        "first_name",
-        "last_name",
-    ]
-    ordering_fields = (
-        "id", "author",
-    )
+    # search_fields = [
+    #     "phone",
+    #     "first_name",
+    #     "last_name",
+    # ]
+    # ordering_fields = (
+    #     "id", "author",
+    # )
 
     def get_queryset(self):
         return get_user_model().objects.all()

@@ -1,10 +1,7 @@
 
-from asyncore import read
-from itertools import product
-from .models import Doller
 from rest_framework import serializers
 from . import models
-import json
+
 
 
 class BrandSerializer(serializers.ModelSerializer):
@@ -106,26 +103,26 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Category
         fields = ("id", "name", "products")
+
 class StatuSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Status
         fields= "__all__"
+    def validate_name(self, data):
+        if models.Status.objects.filter(name__iexact=data.strip()).exists():
+            raise serializers.ValidationError("This category already exists!")
+        return data
+
     
-class Dollerserializers(serializers.ModelSerializer):
-    class Meta:
-        model = models.Doller
-        fields = "__all__"
+
 
 class ProductListCreate(serializers.ModelSerializer):
     colors = serializers.JSONField(required=False)
     images = ImageSerializer(required=False, read_only=True, many=True)
-    status = StatuSerializer(read_only=True)
+    status = serializers.SerializerMethodField()
     brand = BrandSerializer(read_only=True)
     slug = serializers.ReadOnlyField()
 
-    # categories = serializers.SerializerMethodField()
-    # def get_categories(self, obj):
-    #     return obj.categories.slug
     market_price =serializers.IntegerField(read_only=True)
     categories = CategorySerializerMini(read_only=True)
     class Meta:
@@ -148,7 +145,10 @@ class ProductListCreate(serializers.ModelSerializer):
         )
         extra_kwargs = {"price": {"read_only": True}}
 
-
+    def get_status(self, obj):
+        objects = obj.status.all()
+        data = [(status.name) for status in objects]
+        return data
 
 class BannerAdSerializer(serializers.ModelSerializer):
     product = ProductListMini(read_only=True)

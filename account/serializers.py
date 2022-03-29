@@ -9,7 +9,7 @@ class UsersListSerializer(serializers.ModelSerializer):
         fields = [
             "id", "phone",
             "first_name", "last_name",
-            "author",
+            # "author",
         ]
 
 
