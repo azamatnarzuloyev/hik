@@ -179,7 +179,7 @@ class Product(models.Model):
     price = models.IntegerField()
     # image = models.ImageField(upload_to="banners", blank=False, null=True)
     evailable = models.BooleanField(default=True)
-    vailable = models.BooleanField(default=True)
+    
     texttitle = RichTextField()
     text = RichTextField()
     
