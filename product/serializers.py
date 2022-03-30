@@ -52,7 +52,7 @@ class CategorySerializerMini(CategorySerializer):
 class ProductListMini(serializers.ModelSerializer):
     categories = CategorySerializerMini(read_only=True)
     image = serializers.SerializerMethodField()
-    status = StatuSerializer(read_only=True)
+    status = serializers.SerializerMethodField()
 
   
  
