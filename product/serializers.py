@@ -52,7 +52,7 @@ class CategorySerializerMini(CategorySerializer):
 class ProductListMini(serializers.ModelSerializer):
     categories = CategorySerializerMini(read_only=True)
     image = serializers.SerializerMethodField()
-    status = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField(read_only=True)
 
   
  
@@ -119,7 +119,7 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
 class ProductListCreate(serializers.ModelSerializer):
     colors = serializers.JSONField(required=False)
     images = ImageSerializer(required=False, read_only=True, many=True)
-    status = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField(read_only=True)
     brand = BrandSerializer(read_only=True)
     slug = serializers.ReadOnlyField()
 
