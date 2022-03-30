@@ -178,11 +178,10 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, models.CASCADE, blank=True, null=True)
     price = models.IntegerField()
     # image = models.ImageField(upload_to="banners", blank=False, null=True)
-    evailable = models.BooleanField(default=True)
-    
+    available = models.BooleanField(default=True)
     texttitle = RichTextField()
     text = RichTextField()
-    
+   
 
 
         

@@ -146,10 +146,10 @@ class ProductListCreate(serializers.ModelSerializer):
         )
         extra_kwargs = {"price": {"read_only": True}}
 
-    # def get_status(self, obj):
-    #     objects = obj.status.all()
-    #     data = [(status.slug) for status in objects]
-    #     return data
+    def get_status(self, obj):
+        objects = obj.status.all()
+        data = [(status.slug) for status in objects]
+        return data
 
 class BannerAdSerializer(serializers.ModelSerializer):
     product = ProductListMini(read_only=True)
