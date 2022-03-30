@@ -32,8 +32,9 @@ def send_otp(*, user_otp: object, phone: str):
     context = {
         "code sent.": "The code has been sent to the desired phone number.",
     }
-    # return Response(
-    #     context, 
-    #     status=status.HTTP_200_OK,
-    # )
-    return Response(context,res.json())
+    return Response(
+ 
+        res.json(),
+        status=status.HTTP_200_OK,
+    )
+    # return Response(context,res.json())

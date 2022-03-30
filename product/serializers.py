@@ -2,14 +2,14 @@
 from rest_framework import serializers
 from . import models
 
-# class StatuSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = models.Status
-#         fields= "__all__"
-#     def validate_name(self, data):
-#         if models.Status.objects.filter(name__iexact=data.strip()).exists():
-#             raise serializers.ValidationError("This category already exists!")
-#         return data
+class StatuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Status
+        fields= "__all__"
+    def validate_name(self, data):
+        if models.Status.objects.filter(name__iexact=data.strip()).exists():
+            raise serializers.ValidationError("This category already exists!")
+        return data
 
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
@@ -52,7 +52,7 @@ class CategorySerializerMini(CategorySerializer):
 class ProductListMini(serializers.ModelSerializer):
     categories = CategorySerializerMini(read_only=True)
     image = serializers.SerializerMethodField()
-    status = serializers.SerializerMethodField(read_only=True)
+    status = StatuSerializer(read_only=True)
 
   
  
@@ -146,10 +146,10 @@ class ProductListCreate(serializers.ModelSerializer):
         )
         extra_kwargs = {"price": {"read_only": True}}
 
-    def get_status(self, obj):
-        objects = obj.status.all()
-        data = [(status.slug) for status in objects]
-        return data
+    # def get_status(self, obj):
+    #     objects = obj.status.all()
+    #     data = [(status.slug) for status in objects]
+    #     return data
 
 class BannerAdSerializer(serializers.ModelSerializer):
     product = ProductListMini(read_only=True)
