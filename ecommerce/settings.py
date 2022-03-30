@@ -60,6 +60,11 @@ INSTALLED_APPS = [
     'order',
     # 'otp',
 ]
+JAZZMIN_UI_TWEAKS = {
+ 
+    "theme": "darkly",
+    "theme": "slate",
+}
 CORS_ORIGIN_ALLOW_ALL = True
 # This
 CORS_ORIGIN_WHITELIST = [
