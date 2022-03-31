@@ -56,9 +56,10 @@ INSTALLED_APPS = [
     'drf_yasg',
     'ckeditor',
     'product',
+    'tolov',
     'search',
-    'order',
-    # 'otp',
+    # 'order',
+  
 ]
 JAZZMIN_UI_TWEAKS = {
  
@@ -217,8 +218,8 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Blog Api',
-    'DESCRIPTION': 'Simple Blog with Django Rest Framework',
+    'TITLE': 'Elektron dokon',
+    'DESCRIPTION': 'BU mening birinchi backend yozgan dasturim',
     'VERSION': '1.0',
     'SWAGGER_UI_DIST': 'SIDECAR',
     'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',

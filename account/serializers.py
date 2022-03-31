@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
-
+from django_countries.serializers import CountryFieldMixin
 from rest_framework import serializers
-
+from .models import Address
 
 class UsersListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -95,3 +95,8 @@ class ChangeTwoStepPasswordSerializer(CreateTwoStepPasswordSerializer):
     old_password = serializers.CharField(
         max_length=20,
     )
+class AddressSerializer(CountryFieldMixin, serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = '__all__'
+        read_only_fields = ['user']

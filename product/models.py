@@ -126,7 +126,7 @@ class Image(models.Model):
     image = models.ImageField(upload_to="products", blank=False, null=True)
 
     
-class Status(models.Model):
+class CategoryStatus(models.Model):
     name = models.CharField(max_length=200, blank=False, null=False, unique=True)
     slug = models.SlugField(unique=True, null=True, editable=False, blank=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -134,7 +134,7 @@ class Status(models.Model):
    
 
     class Meta:
-        verbose_name_plural = "statuss"
+        verbose_name_plural = "CategoryStatus"
         ordering = ["pk", "name"]
 
     def __str__(self):
@@ -172,7 +172,7 @@ class Product(models.Model):
         # null=True,
         # blank=True,  
     )
-    status = models.ManyToManyField(Status)
+    categorystatus = models.ManyToManyField(CategoryStatus)
     quantit = models.IntegerField(default=1, null=False, blank=True)
     description = models.TextField(blank=True, null=True)
     brand = models.ForeignKey(Brand, models.CASCADE, blank=True, null=True)

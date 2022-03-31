@@ -4,12 +4,12 @@ from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
 
 from . import models
-from .models import Category, Status
+from .models import Category, CategoryStatus
 # Register your models here.
 
 admin.site.register(Category, MPTTModelAdmin)
 admin.site.register(models.Brand)
-admin.site.register(Status)
+admin.site.register(CategoryStatus)
 
 
 class GalleryInlines(admin.TabularInline):

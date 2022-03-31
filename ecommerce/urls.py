@@ -12,21 +12,27 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView
 )
 
-admin.autodiscover()
-admin.site.enable_nav_sidebar = False
+# admin.autodiscover()
+# admin.site.enable_nav_sidebar = False
 
-schema_view = get_schema_view(
-   openapi.Info(
-      title="Azamat narzulloyev",
-      default_version='v1',
-      description="Test description",
-      terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="azamatsabina1796@mail.ru"),
-      license=openapi.License(name="elektron dokon lisensiya"),
-   ),
-   public=True,
-   permission_classes=(permissions.AllowAny,),
+# schema_view = get_schema_view(
+#    openapi.Info(
+#       title="Azamat narzulloyev",
+#       default_version='v1',
+#       description="Test description",
+#       terms_of_service="https://www.google.com/policies/terms/",
+#       contact=openapi.Contact(email="azamatsabina1796@mail.ru"),
+#       license=openapi.License(name="elektron dokon lisensiya"),
+#    ),
+#    public=True,
+#    permission_classes=(permissions.AllowAny,),
+# )
+from drf_spectacular.views import (
+    SpectacularAPIView, 
+    SpectacularRedocView, 
+    SpectacularSwaggerView
 )
+
 
 
 urlpatterns = [
@@ -39,10 +45,13 @@ urlpatterns = [
    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
    path("api/v1/search/", include("search.urls")),
-   path('api/v1/orders/', include('order.urls')),
-   path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-   path('redoc/', schema_view.with_ui('redoc', cache_timeout=0),  name='schema-redoc'),
-  
+#    path('api/v1/orders/', include('order.urls')),
+   path('api/v1/tolov/', include('tolov.urls', namespace='tolov')),
+#    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+#    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0),  name='schema-redoc'),
+   path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+   path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+   path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ] 
 #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 from django.conf.urls.static import static
