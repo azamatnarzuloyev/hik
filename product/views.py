@@ -30,7 +30,7 @@ class ProductFilter(fil.FilterSet):
 
     class Meta:
         model = models.Product
-        fields = ['name','categories__slug','brand','categorystatus__slug',  'mgpiksel',]
+        fields = ['name','categories__slug','brand','categorystatuses__slug',  'mgpiksel',]
 
 
 # class ProductList(generics.ListAPIView):

@@ -134,11 +134,12 @@ class CategoryStatus(models.Model):
    
 
     class Meta:
-        verbose_name_plural = "CategoryStatus"
+        verbose_name_plural = "CategoryStatuses"
         ordering = ["pk", "name"]
 
     def __str__(self):
         return self.name
+
 
     @classmethod
     def make_slug(cls, name):
@@ -172,7 +173,7 @@ class Product(models.Model):
         # null=True,
         # blank=True,  
     )
-    categorystatus = models.ManyToManyField(CategoryStatus)
+    categorystatuses = models.ManyToManyField(CategoryStatus, blank=False, null=False)
     quantit = models.IntegerField(default=1, null=False, blank=True)
     description = models.TextField(blank=True, null=True)
     brand = models.ForeignKey(Brand, models.CASCADE, blank=True, null=True)

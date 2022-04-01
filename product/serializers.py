@@ -4,12 +4,17 @@ from . import models
 
 class StatuSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.CategoryStatus
         fields= "__all__"
-    # def validate_name(self, data):
-    #     if models.CategoryStatus.objects.filter(name__iexact=data.strip()).exists():
-    #         raise serializers.ValidationError("This category already exists!")
-    #     return data
+        model = models.CategoryStatus
+    
+    def validate_name(self, data):
+        if models.CategoryStatus.objects.filter(name__iexact=data.strip()).exists():
+            raise serializers.ValidationError("This category already exists!")
+        return data
+
+class Statusmini(serializers.ModelSerializer):
+    class Meta(StatuSerializer.Meta):
+        fields = ["name"]
 
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
@@ -52,8 +57,7 @@ class CategorySerializerMini(CategorySerializer):
 class ProductListMini(serializers.ModelSerializer):
     categories = CategorySerializerMini(read_only=True)
     image = serializers.SerializerMethodField()
-    # status = serializers.SerializerMethodField()
-    categorystatus = serializers.SerializerMethodField()
+    categorystatuses = serializers.SerializerMethodField()
     
  
     class Meta:
@@ -63,15 +67,15 @@ class ProductListMini(serializers.ModelSerializer):
             "name",
             "slug",
             'mgpiksel',
-            'categorystatus',
+            'categorystatuses',
             'categories',
             "price",
             "image",
             "image_count",   
         )
-    def get_categorystatus(self, obj):
-        objects = obj.categorystatus.all()
-        data = [(categorystatus.slug) for categorystatus in objects]
+    def get_categorystatuses(self, obj):
+        objects = obj.categorystatuses.all()
+        data = [(categoryStatus.slug) for categoryStatus in objects]
         return data
 
 
@@ -119,7 +123,7 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
 class ProductListCreate(serializers.ModelSerializer):
     colors = serializers.JSONField(required=False)
     images = ImageSerializer(required=False, read_only=True, many=True)
-    categorystatus = serializers.SerializerMethodField()
+    categorystatuses = serializers.SerializerMethodField()
     brand = BrandSerializer(read_only=True)
     slug = serializers.ReadOnlyField()
 
@@ -133,7 +137,7 @@ class ProductListCreate(serializers.ModelSerializer):
             "name",
             'mgpiksel',
             "categories",
-            'categorystatus',
+            'categorystatuses',
             "description",
             "brand",
             'market_price',
@@ -146,8 +150,8 @@ class ProductListCreate(serializers.ModelSerializer):
         )
         extra_kwargs = {"price": {"read_only": True}}
 
-    def get_categorystatus(self, obj):
-        objects = obj.categorystatus.all()
+    def get_categorystatuses(self, obj):
+        objects = obj.categorystatuses.all()
         data = [(categorystatus.slug) for categorystatus in objects]
         return data
 
