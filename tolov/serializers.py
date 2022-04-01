@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import ShippingAddress, OrderItem, Order
 from account.serializers import UsersListSerializer
+
 class ShippingAddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShippingAddress

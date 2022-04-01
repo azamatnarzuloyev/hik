@@ -6,10 +6,10 @@ class StatuSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CategoryStatus
         fields= "__all__"
-    def validate_name(self, data):
-        if models.CategoryStatus.objects.filter(name__iexact=data.strip()).exists():
-            raise serializers.ValidationError("This category already exists!")
-        return data
+    # def validate_name(self, data):
+    #     if models.CategoryStatus.objects.filter(name__iexact=data.strip()).exists():
+    #         raise serializers.ValidationError("This category already exists!")
+    #     return data
 
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
@@ -53,8 +53,8 @@ class ProductListMini(serializers.ModelSerializer):
     categories = CategorySerializerMini(read_only=True)
     image = serializers.SerializerMethodField()
     # status = serializers.SerializerMethodField()
-    categorystatus = StatuSerializer(read_only=True)
-  
+    categorystatus = serializers.SerializerMethodField()
+    
  
     class Meta:
         model = models.Product
@@ -69,10 +69,10 @@ class ProductListMini(serializers.ModelSerializer):
             "image",
             "image_count",   
         )
-    # def get_status(self, obj):
-    #     objects = obj.status.all()
-    #     data = [(status.slug) for status in objects]
-    #     return data
+    def get_categorystatus(self, obj):
+        objects = obj.categorystatus.all()
+        data = [(categorystatus.slug) for categorystatus in objects]
+        return data
 
 
         extra_kwargs = {"price": {"read_only": True}}
@@ -146,10 +146,10 @@ class ProductListCreate(serializers.ModelSerializer):
         )
         extra_kwargs = {"price": {"read_only": True}}
 
-    # def get_status(self, obj):
-    #     objects = obj.status.all()
-    #     data = [(status.slug) for status in objects]
-    #     return data
+    def get_categorystatus(self, obj):
+        objects = obj.categorystatus.all()
+        data = [(categorystatus.slug) for categorystatus in objects]
+        return data
 
 class BannerAdSerializer(serializers.ModelSerializer):
     product = ProductListMini(read_only=True)

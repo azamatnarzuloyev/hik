@@ -193,9 +193,9 @@ import os
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # PAYSTACK_TEST_KEY = os('PAYSTACK_TEST_KEY')
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'permissions.IsSuperUserOrReadOnly',
-    ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'permissions.IsSuperUserOrReadOnly',
+    # ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.SearchFilter',
