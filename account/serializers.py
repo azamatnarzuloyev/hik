@@ -1,3 +1,4 @@
+from os import access
 from django.contrib.auth import get_user_model
 from django_countries.serializers import CountryFieldMixin
 from rest_framework import serializers
@@ -23,7 +24,7 @@ class UserDetailUpdateDeleteSerializer(serializers.ModelSerializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     phone = serializers.ReadOnlyField()
-
+    
     class Meta:
         model = get_user_model()
         fields = [
