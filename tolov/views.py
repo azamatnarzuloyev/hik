@@ -13,7 +13,6 @@ from .serializers import OrderSerializer
 def addOrderItems(request):
     user = request.user
     data = request.data
-
     orderItems = data['orderItems']
     if orderItems and len(orderItems) == 0:
         message = {'detail': 'No order items'}
@@ -39,7 +38,7 @@ def addOrderItems(request):
 
         # (3) create order items and set order-relationship (foreing key)
         for i in orderItems:
-            product = Product.objects.get(_id=i['product'])
+            product = Product.objects.get(id=i['product'])
 
             orderItem = OrderItem.objects.create(
                 product=product,
@@ -51,19 +50,16 @@ def addOrderItems(request):
             )
 
             # (4) update stock
-            product.countInStock -= orderItem.qty
+            product.quantit -= orderItem.qty
             product.save()
 
         serializer = OrderSerializer(order, many=False)
         return Response(serializer.data)
-
-
 @api_view(['GET'])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated])
 def getOrderById(request, pk):
     user = request.user
     order = Order.objects.get(_id=pk)
-
     try:
         if user.is_staff or order.user == user:
             serializer = OrderSerializer(order, many=False)
@@ -75,10 +71,7 @@ def getOrderById(request, pk):
         message = {'detail': 'Order does not exist'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
-
-
 @api_view(['GET'])
-\
 def getMyOrders(request):
     user = request.user
     orders = user.order_set.all()
@@ -120,3 +113,4 @@ def updateOrderToDelivered(request, pk):
     order.save()
 
     return Response('Order was delivered')
+
