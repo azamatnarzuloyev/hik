@@ -11,7 +11,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView
 )
-
+from decouple import config
 # admin.autodiscover()
 # admin.site.enable_nav_sidebar = False
 
@@ -56,12 +56,15 @@ urlpatterns = [
 #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 from django.conf.urls.static import static
 from django.conf import settings
+if config("DEBUG", default=False, cast=bool):
+    from django.conf.urls.static import static
+    from django.conf import settings
 
     # add root static files
-urlpatterns = urlpatterns + static(
+    urlpatterns = urlpatterns + static(
         settings.STATIC_URL, document_root=settings.STATIC_ROOT
     )
     # add media static files
-urlpatterns = urlpatterns + static(
+    urlpatterns = urlpatterns + static(
         settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
     )
