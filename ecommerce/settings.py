@@ -26,14 +26,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env.str("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG =env.bool('DEBUG', default=False)
-DEBUG = config("DEBUG")
+DEBUG =True
 ALLOWED_HOSTS = ['.herokuapp.com','127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'jazzmin',
+    # 'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -187,6 +187,7 @@ MEDIA_ROOT = "media"
 
 MEDIA_ROOT = str(BASE_DIR.joinpath('media'))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
