@@ -16,7 +16,10 @@ from mptt.models import  TreeForeignKey, MPTTModel
 from PIL import Image
 from django.utils.html import format_html
 
+class Doller(models.Model):
+    kurs = models.IntegerField()
 
+   
 
 
 def MakeThumb(instance, thubm_size=((400, 400))):

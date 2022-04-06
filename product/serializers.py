@@ -1,6 +1,13 @@
 
+from pyrsistent import field
 from rest_framework import serializers
 from . import models
+
+class DOllerSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = models.Doller
+        fields = ['kurs']
+
 
 class StatuSerializer(serializers.ModelSerializer):
     class Meta:

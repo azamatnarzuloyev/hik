@@ -11,7 +11,6 @@ admin.site.register(Category, MPTTModelAdmin)
 admin.site.register(models.Brand)
 admin.site.register(CategoryStatus)
 
-
 class GalleryInlines(admin.TabularInline):
     model = models.Image
     max_num = 6
@@ -45,4 +44,8 @@ class ProductsModelAdmin(admin.ModelAdmin):
      
     ]
 
-
+@admin.register(models.Doller)
+class DollersModelAdmin(admin.ModelAdmin):
+    list_display = [
+     'kurs' 
+    ]

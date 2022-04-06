@@ -46,7 +46,9 @@ class ProductFilter(fil.FilterSet):
 #         queryset = models.Product.objects.filter(categories_slug=query)
 #         serializer = serializers.ProductListMini(queryset, many=True)
 #         return (serializer.data)
-
+class DollerViews(generics.ListAPIView):
+    serializer_class = serializers.DOllerSerializers
+    queryset  = models.Doller.objects.all()
 
 
 class TopProducts(generics.ListAPIView):

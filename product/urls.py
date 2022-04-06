@@ -13,5 +13,5 @@ urlpatterns = [
         "categories/<slug>/", views.CategoryDetail.as_view(), name="categories_detail"
     ),
   
-   
+   path('doller/', views.DollerViews.as_view(), name='doller'),
 ]

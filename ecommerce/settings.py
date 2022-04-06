@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'account',
     'extensions',
     'mptt',
+    'clickuz',
     'rest_framework',
     'drf_spectacular',
     'drf_spectacular_sidecar',
@@ -73,6 +74,11 @@ CORS_ORIGIN_WHITELIST = [
     'https://buyy.herokuapp.com',
     
 ]
+CLICK_SETTINGS = {
+    'service_id':'1',
+    'merchant_id':'1',
+    'secret_key':'1'
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -218,7 +224,7 @@ REST_FRAMEWORK = {
     'BLACKLIST_AFTER_ROTATION': True, 
     'UPDATE_LAST_LOGIN': False, 
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20
 }

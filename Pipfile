@@ -29,6 +29,7 @@ drf-spectacular-sidecar = "*"
 pyjwt = "*"
 python-decouple = "*"
 django-jazzmin = "*"
+clickuz = "*"
 
 [dev-packages]
 
