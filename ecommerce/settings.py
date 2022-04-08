@@ -15,14 +15,11 @@ from pathlib import Path
 from environs import Env
 env = Env()
 env.read_env()
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env.str("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG =env.bool('DEBUG', default=False)
@@ -59,7 +56,7 @@ INSTALLED_APPS = [
     'product',
     'tolov',
     'search',
-    # 'order',
+
   
 ]
 JAZZMIN_UI_TWEAKS = {
@@ -67,8 +64,8 @@ JAZZMIN_UI_TWEAKS = {
     "theme": "darkly",
     "theme": "slate",
 }
-CORS_ORIGIN_ALLOW_ALL = False
-# This
+CORS_ORIGIN_ALLOW_ALL = True
+
 CORS_ORIGIN_WHITELIST = [
     'http://buyy.herokuapp.com',
     'https://buyy.herokuapp.com',
@@ -113,8 +110,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # DATABASES = {
 #     'default': {
@@ -172,8 +167,7 @@ USE_I18N = True
 USE_TZ = True
 
 AUTH_USER_MODEL = 'account.User'
-
-
+SITE_ID=1
 from datetime import timedelta
 
 
@@ -183,7 +177,7 @@ from datetime import timedelta
 STATIC_URL = 'static/'
 STATIC_ROOT = str(BASE_DIR.joinpath('static'))
 MEDIA_URL = "/media/"
-MEDIA_ROOT = "media"
+# MEDIA_ROOT = "media"
 
 MEDIA_ROOT = str(BASE_DIR.joinpath('media'))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -196,7 +190,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 import os
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# PAYSTACK_TEST_KEY = os('PAYSTACK_TEST_KEY')
+
+
 REST_FRAMEWORK = {
     # 'DEFAULT_PERMISSION_CLASSES': [
     #     'permissions.IsSuperUserOrReadOnly',

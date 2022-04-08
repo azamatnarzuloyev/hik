@@ -2,6 +2,7 @@ from django.db import models
 from ecommerce.settings import AUTH_USER_MODEL
 
 from product.models import Product
+
 class Order(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     paymentMethod = models.CharField(max_length=200, null=True, blank=True)

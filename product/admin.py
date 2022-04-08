@@ -15,26 +15,26 @@ class GalleryInlines(admin.TabularInline):
     model = models.Image
     max_num = 6
 
-# @admin.register(models.Product)
-# class ProductsModelAdmin(admin.ModelAdmin):
-#     list_display = [
-#         "name",
-#         "price",
-#         'image_tag',
+@admin.register(models.Product)
+class ProductsModelAdmin(admin.ModelAdmin):
+    list_display = [
+        "name",
+        "price",
+        'image_tag',
 
       
-#     ]
+    ]
 
-#     inlines = [
-#         GalleryInlines
-#     ]
+    inlines = [
+        GalleryInlines
+    ]
 
-#     search_fields = [
-#         "name",
+    search_fields = [
+        "name",
        
       
      
-#     ]
+    ]
 
 @admin.register(models.Doller)
 class DollersModelAdmin(admin.ModelAdmin):

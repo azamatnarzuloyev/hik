@@ -1,28 +1,18 @@
-from unicodedata import name
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
-from decouple import config
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView
 )
-from decouple import config
-
 from drf_spectacular.views import (
     SpectacularAPIView, 
     SpectacularRedocView, 
     SpectacularSwaggerView
 )
-
 from django.conf import settings
-
 urlpatterns = [
-  
    path('admin/', admin.site.urls),
    path('api/v1/', include("product.urls")),
    path('api/v1/account/', include('account.urls', namespace='account')),
@@ -37,9 +27,6 @@ urlpatterns = [
    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ] 
-# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-from django.conf.urls.static import static
-from django.conf import settings
 
     # add root static files
 urlpatterns = urlpatterns + static(

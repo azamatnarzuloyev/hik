@@ -38,14 +38,14 @@ def MakeThumb(instance, thubm_size=((400, 400))):
     elif thumb_extension == ".png":
         FTYPE = "PNG"
     else:
-        return False  # Unrecognized file type
+        return False  
 
-    # Save thumbnail to in-memory file as StringIO
+
     temp_thumb = BytesIO()
     img.save(temp_thumb, FTYPE)
     temp_thumb.seek(0)
 
-    # set save=False, otherwise it will run in an infinite loop
+
     data = {
         "name": thumb_filename,
         "content": ContentFile(temp_thumb.read()),
@@ -173,8 +173,6 @@ class Product(models.Model):
         Category,
         related_name='product_category',
         on_delete=models.CASCADE,
-        # null=True,
-        # blank=True,  
     )
     categorystatuses = models.ManyToManyField(CategoryStatus, blank=True)
     quantit = models.IntegerField(default=1, null=False, blank=True)
@@ -186,10 +184,6 @@ class Product(models.Model):
     texttitle = RichTextField()
     text = RichTextField()
    
-
-
-        
-
     @property
     def image(self):
         obj = self.images.first()
