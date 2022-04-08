@@ -118,9 +118,15 @@ class Brand(models.Model):
         self.name = self.name.title() if self.name else self.name
         super().save(*args, **kwargs)
 
-
-
+class Filtermodel(models.Model):
+    product = models.ForeignKey(
+        "product.Product", models.CASCADE, null=True, related_name="filter"
+    )
+    kanal = models.CharField(max_length=50, blank=True, null=True)
+    xard = models.CharField(max_length=50, blank=True, null=True)
+    pikcel = models.IntegerField(blank=True, null=True)
     
+
 
 class Image(models.Model):
     product = models.ForeignKey(

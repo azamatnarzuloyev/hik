@@ -65,6 +65,12 @@ JAZZMIN_UI_TWEAKS = {
     "theme": "darkly",
     "theme": "slate",
 }
+
+JAZZMIN_SETTINGS = {
+    "site_title": "HIKVISION Admin",
+    "site_header": "HIKVISION",
+    "site_brand": "HIKVISION",
+}
 CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = [

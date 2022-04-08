@@ -1,4 +1,5 @@
 
+from dataclasses import fields
 from pyrsistent import field
 from rest_framework import serializers
 from . import models
@@ -54,7 +55,9 @@ class CategorySerializer(serializers.ModelSerializer):
         return data
  
        
-
+class FiltermodelSerializer(serializers.ModelSerializer):
+    model = models.Filtermodel
+    fields = "__all__"
 
 class CategorySerializerMini(CategorySerializer):
     class Meta(CategorySerializer.Meta):
@@ -65,7 +68,7 @@ class ProductListMini(serializers.ModelSerializer):
     categories = CategorySerializerMini(read_only=True)
     image = serializers.SerializerMethodField()
     categorystatuses = serializers.SerializerMethodField()
-    
+
  
     class Meta:
         model = models.Product
@@ -73,6 +76,7 @@ class ProductListMini(serializers.ModelSerializer):
             "id",
             "name",
             "slug",
+       
             'mgpiksel',
             'categorystatuses',
             'categories',
@@ -84,9 +88,10 @@ class ProductListMini(serializers.ModelSerializer):
         objects = obj.categorystatuses.all()
         data = [(categoryStatus.slug) for categoryStatus in objects]
         return data
+   
 
 
-        extra_kwargs = {"price": {"read_only": True}}
+    extra_kwargs = {"price": {"read_only": True}}
 
 
     def get_image(self, obj):

@@ -3,13 +3,14 @@ from django.urls import path
 from .views import (
     UsersList, UsersDetailUpdateDelete, UserProfile, 
     Login, Register, VerifyOtp,
-    ChangeTwoStepPassword, CreateTwoStepPassword,
+    ChangeTwoStepPassword, CreateTwoStepPassword,LogoutView
 )
 
 app_name = "account"
 
 urlpatterns = [
     path("list/", UsersList.as_view(), name="users-list"),
+    path('logaut/',LogoutView.as_view(), name='logaut' ),
     path("profile/", UserProfile.as_view(), name="profile"),
     path("login/", Login.as_view(), name="login"),
     path("register/", Register.as_view(), name="register"),

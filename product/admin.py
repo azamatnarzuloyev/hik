@@ -7,7 +7,7 @@ from . import models
 from .models import Category, CategoryStatus
 # Register your models here.
 
-admin.site.register(Category, MPTTModelAdmin)
+admin.site.register(Category,MPTTModelAdmin)
 admin.site.register(models.Brand)
 admin.site.register(CategoryStatus)
 
@@ -15,6 +15,9 @@ class GalleryInlines(admin.TabularInline):
     model = models.Image
     max_num = 6
 
+class FilterInline(admin.TabularInline):
+    model = models.Filtermodel
+    max_num = 1
 @admin.register(models.Product)
 class ProductsModelAdmin(admin.ModelAdmin):
     list_display = [
@@ -26,13 +29,13 @@ class ProductsModelAdmin(admin.ModelAdmin):
     ]
 
     inlines = [
-        GalleryInlines
+        GalleryInlines,  FilterInline
     ]
+   
+
 
     search_fields = [
-        "name",
-       
-      
+        "name", 
      
     ]
 
