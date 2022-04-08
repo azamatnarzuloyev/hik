@@ -30,6 +30,7 @@ pyjwt = "*"
 python-decouple = "*"
 django-jazzmin = "*"
 clickuz = "*"
+poetry = "*"
 
 [dev-packages]
 

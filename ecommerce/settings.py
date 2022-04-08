@@ -22,8 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = env.str("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG =env.bool('DEBUG', default=False)
-DEBUG =True
+DEBUG =env.bool('DEBUG', default=False)
+DEBUG =False
+
 ALLOWED_HOSTS = ['.herokuapp.com','127.0.0.1']
 
 
@@ -51,7 +52,7 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'django_countries',
-    'drf_yasg',
+    # 'drf_yasg',
     'ckeditor',
     'product',
     'tolov',
@@ -59,11 +60,11 @@ INSTALLED_APPS = [
 
   
 ]
-JAZZMIN_UI_TWEAKS = {
+# JAZZMIN_UI_TWEAKS = {
  
-    "theme": "darkly",
-    "theme": "slate",
-}
+#     "theme": "darkly",
+#     "theme": "slate",
+# }
 CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = [
@@ -78,6 +79,7 @@ CLICK_SETTINGS = {
 }
 
 MIDDLEWARE = [
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
