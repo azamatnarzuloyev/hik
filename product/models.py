@@ -164,18 +164,7 @@ class CategoryStatus(models.Model):
 
 
 class Product(models.Model):
-    CHOICES_STATUS = (
-		('r', 'return'),
-		('p', 'publish'),
-		('d', 'draft')
-		)
-    CHOICES_CARAT = (
-		("24", "24 ayar"),
-		("22", "22 ayar"),
-		("18", "18 ayar"),
-		("14", "14 ayar"),
-		("8", "8 ayar"),
-		)
+  
     mgpiksel = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     slug = models.SlugField(unique=True, editable=False, null=False, blank=True)
@@ -184,7 +173,6 @@ class Product(models.Model):
         related_name='product_category',
         on_delete=models.CASCADE,
     )
-    status = models.CharField(choices=CHOICES_STATUS, max_length=2, blank=True, null=True)
     categorystatuses = models.ManyToManyField(CategoryStatus, blank=True)
     quantit = models.IntegerField(default=1, null=False, blank=True)
     description = models.TextField(blank=True, null=True)
