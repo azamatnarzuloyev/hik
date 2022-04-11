@@ -15,9 +15,7 @@ class GalleryInlines(admin.TabularInline):
     model = models.Image
     max_num = 6
 
-class FilterInline(admin.TabularInline):
-    model = models.Filtermodel
-    max_num = 1
+
 @admin.register(models.Product)
 class ProductsModelAdmin(admin.ModelAdmin):
     list_display = [
@@ -29,7 +27,7 @@ class ProductsModelAdmin(admin.ModelAdmin):
     ]
 
     inlines = [
-        GalleryInlines,  FilterInline
+        GalleryInlines
     ]
    
 

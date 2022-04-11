@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'product',
     'tolov',
+    'filter',
     'search',
 
   

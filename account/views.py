@@ -38,9 +38,9 @@ class LogoutView(APIView):
             token = RefreshToken(refresh_token)
             token.blacklist()
 
-            return Response(status=status.HTTP_205_RESET_CONTENT)
+            return Response(status=status.HTTP_205_RESET_CONTENT,content_type="status seksesfull")
         except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST, content_type="status error")
 
 
 class UsersList(ListAPIView):
@@ -71,18 +71,7 @@ class UsersList(ListAPIView):
 
 
 class UsersDetailUpdateDelete(RetrieveUpdateDestroyAPIView):
-    """
-    get:
-        Returns the detail of a user instance.
-        parameters: [pk]
-    put:
-        Update the detail of a user instance
-        parameters: exclude[password,]
-    delete:
-        Delete a user instance.
-        
-        parameters: [pk]
-    """
+
 
     serializer_class = UserDetailUpdateDeleteSerializer
     permission_classes = [

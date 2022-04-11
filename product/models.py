@@ -11,6 +11,7 @@ from io import  BytesIO
 from django.core.files.base import ContentFile
 import os.path
 from ckeditor.fields import RichTextField
+from requests import delete
 from mptt.models import  TreeForeignKey, MPTTModel
 # Create your models here.
 from PIL import Image
@@ -117,16 +118,7 @@ class Brand(models.Model):
     def save(self, *args, **kwargs):
         self.name = self.name.title() if self.name else self.name
         super().save(*args, **kwargs)
-
-class Filtermodel(models.Model):
-    product = models.ForeignKey(
-        "product.Product", models.CASCADE, null=True, related_name="filter"
-    )
-    kanal = models.CharField(max_length=50, blank=True, null=True)
-    xard = models.CharField(max_length=50, blank=True, null=True)
-    pikcel = models.IntegerField(blank=True, null=True)
-    
-
+        
 
 class Image(models.Model):
     product = models.ForeignKey(
@@ -172,6 +164,18 @@ class CategoryStatus(models.Model):
 
 
 class Product(models.Model):
+    CHOICES_STATUS = (
+		('r', 'return'),
+		('p', 'publish'),
+		('d', 'draft')
+		)
+    CHOICES_CARAT = (
+		("24", "24 ayar"),
+		("22", "22 ayar"),
+		("18", "18 ayar"),
+		("14", "14 ayar"),
+		("8", "8 ayar"),
+		)
     mgpiksel = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     slug = models.SlugField(unique=True, editable=False, null=False, blank=True)
@@ -180,6 +184,7 @@ class Product(models.Model):
         related_name='product_category',
         on_delete=models.CASCADE,
     )
+    status = models.CharField(choices=CHOICES_STATUS, max_length=2, blank=True, null=True)
     categorystatuses = models.ManyToManyField(CategoryStatus, blank=True)
     quantit = models.IntegerField(default=1, null=False, blank=True)
     description = models.TextField(blank=True, null=True)
@@ -189,7 +194,7 @@ class Product(models.Model):
     available = models.BooleanField(default=True)
     texttitle = RichTextField()
     text = RichTextField()
-   
+
     @property
     def image(self):
         obj = self.images.first()

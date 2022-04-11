@@ -1,6 +1,4 @@
 
-from dataclasses import fields
-from pyrsistent import field
 from rest_framework import serializers
 from . import models
 
@@ -54,10 +52,7 @@ class CategorySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("This category already exists!")
         return data
  
-       
-class FiltermodelSerializer(serializers.ModelSerializer):
-    model = models.Filtermodel
-    fields = "__all__"
+
 
 class CategorySerializerMini(CategorySerializer):
     class Meta(CategorySerializer.Meta):
@@ -68,27 +63,24 @@ class ProductListMini(serializers.ModelSerializer):
     categories = CategorySerializerMini(read_only=True)
     image = serializers.SerializerMethodField()
     categorystatuses = serializers.SerializerMethodField()
-
- 
     class Meta:
         model = models.Product
         fields = (
             "id",
             "name",
             "slug",
-       
             'mgpiksel',
             'categorystatuses',
             'categories',
             "price",
             "image",
-            "image_count",   
+            "image_count", 
+      
         )
     def get_categorystatuses(self, obj):
         objects = obj.categorystatuses.all()
         data = [(categoryStatus.slug) for categoryStatus in objects]
         return data
-   
 
 
     extra_kwargs = {"price": {"read_only": True}}
@@ -138,7 +130,6 @@ class ProductListCreate(serializers.ModelSerializer):
     categorystatuses = serializers.SerializerMethodField()
     brand = BrandSerializer(read_only=True)
     slug = serializers.ReadOnlyField()
-
     market_price =serializers.IntegerField(read_only=True)
     categories = CategorySerializerMini(read_only=True)
     class Meta:
@@ -148,6 +139,7 @@ class ProductListCreate(serializers.ModelSerializer):
             "slug",
             "name",
             'mgpiksel',
+            # 'filter',
             "categories",
             'categorystatuses',
             "description",
