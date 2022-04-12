@@ -6,7 +6,7 @@ from .models import Children, FIlterProduct
 class ChildrenSerializers(serializers.ModelSerializer):
     class Meta:
         model = Children
-        fields = "__all__"
+        fields = 'name'
 
 
 

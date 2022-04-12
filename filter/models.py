@@ -1,7 +1,5 @@
-from audioop import findfactor
-from unicodedata import category
+
 from django.db import models
-from ckeditor.fields import RichTextField
 from product.models import CategoryStatus, Category
 # Create your models here.
 from mptt.models import  TreeForeignKey
@@ -9,7 +7,12 @@ from mptt.models import  TreeForeignKey
 
 class Children(models.Model):
     name = models.CharField(max_length=50)
-  
+    class Meta:
+        verbose_name_plural = "productfilter"
+        ordering = ["pk", "name"]
+
+    def __str__(self):
+        return self.name
 
 
 class FIlterProduct(models.Model):
@@ -21,6 +24,9 @@ class FIlterProduct(models.Model):
     categorystatuses = models.ManyToManyField(CategoryStatus, blank=True)
     name = models.CharField(max_length=50, blank=True, null=True)
     childrens= models.ManyToManyField(Children)
+
+    def __str__(self):
+        return self.name
     
 
 

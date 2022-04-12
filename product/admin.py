@@ -6,7 +6,7 @@ from mptt.admin import MPTTModelAdmin
 from . import models
 from .models import Category, CategoryStatus
 # Register your models here.
-
+admin.site.register(models.Productallfilter)
 admin.site.register(Category,MPTTModelAdmin)
 admin.site.register(models.Brand)
 admin.site.register(CategoryStatus)

@@ -63,6 +63,7 @@ class ProductListMini(serializers.ModelSerializer):
     categories = CategorySerializerMini(read_only=True)
     image = serializers.SerializerMethodField()
     categorystatuses = serializers.SerializerMethodField()
+    productallfilter = serializers.SerializerMethodField()
     class Meta:
         model = models.Product
         fields = (
@@ -70,6 +71,7 @@ class ProductListMini(serializers.ModelSerializer):
             "name",
             "slug",
             'mgpiksel',
+            'productallfilter',
             'categorystatuses',
             'categories',
             "price",
@@ -81,7 +83,10 @@ class ProductListMini(serializers.ModelSerializer):
         objects = obj.categorystatuses.all()
         data = [(categoryStatus.slug) for categoryStatus in objects]
         return data
-
+    def get_productallfilter(self, obj):
+        objects = obj.productallfilter.all()
+        data = [(productallfilter.name) for productallfilter in objects]
+        return data
 
     extra_kwargs = {"price": {"read_only": True}}
 

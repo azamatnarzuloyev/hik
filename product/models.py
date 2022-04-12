@@ -1,26 +1,23 @@
 
 from django.db import models
+from django.forms import CharField
+
 from django.utils.text import slugify
 import random, string
 from django.utils import timezone
 from django.urls import reverse
-from django.core.validators import ValidationError
 from django.utils.text import gettext_lazy as _
 from PIL import Image as image
 from io import  BytesIO
 from django.core.files.base import ContentFile
 import os.path
 from ckeditor.fields import RichTextField
-from requests import delete
 from mptt.models import  TreeForeignKey, MPTTModel
 # Create your models here.
-from PIL import Image
 from django.utils.html import format_html
 
 class Doller(models.Model):
     kurs = models.IntegerField()
-
-   
 
 
 def MakeThumb(instance, thubm_size=((400, 400))):
@@ -160,6 +157,15 @@ class CategoryStatus(models.Model):
 
         super().save(*args, **kwargs)
 
+class Productallfilter(models.Model):
+    name = models.CharField(max_length=50)
+    class Meta:
+        verbose_name_plural = "filter"
+        ordering = ["pk", "name"]
+
+    def __str__(self):
+        return self.name
+
 
 
 
@@ -173,15 +179,17 @@ class Product(models.Model):
         related_name='product_category',
         on_delete=models.CASCADE,
     )
+    productallfilter = models.ManyToManyField(Productallfilter)
     categorystatuses = models.ManyToManyField(CategoryStatus, blank=True)
     quantit = models.IntegerField(default=1, null=False, blank=True)
     description = models.TextField(blank=True, null=True)
     brand = models.ForeignKey(Brand, models.CASCADE, blank=True, null=True)
     price = models.IntegerField()
-    # image = models.ImageField(upload_to="banners", blank=False, null=True)
+    active = models.BooleanField(default=True)
     available = models.BooleanField(default=True)
     texttitle = RichTextField()
     text = RichTextField()
+    
 
     @property
     def image(self):

@@ -30,7 +30,7 @@ class ProductFilter(fil.FilterSet):
 
     class Meta:
         model = models.Product
-        fields = ['name','categories__slug','brand','categorystatuses__slug',  'mgpiksel',]
+        fields = ['name','categories__slug','brand','categorystatuses__slug','productallfilter__name' , 'mgpiksel',]
 
 
 
@@ -50,8 +50,8 @@ class TopProducts(generics.ListAPIView):
 class ProductListCreate(generics.ListAPIView):
     serializer_class = serializers.ProductListCreate
     queryset = models.Product.objects.all()
-    # filter_backends = [filters.SearchFilter]
-    # search_fields = ["name"]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["name"]
     lookup_field = "slug"
  
     filter_backends = (fil.DjangoFilterBackend,)
@@ -75,7 +75,13 @@ class ProductDetail(generics.RetrieveAPIView):
     filter_backends = (fil.DjangoFilterBackend,)
     filterset_class = ProductFilter
     
-
+    
+class ProductSearch(generics.ListAPIView):
+    serializer_class = serializers.ProductListCreate
+    queryset = models.Product.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["name", "categories__slug"]
+    lookup_field = "slug"
    
 
 

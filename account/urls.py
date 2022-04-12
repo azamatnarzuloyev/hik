@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (
     UsersList, UsersDetailUpdateDelete, UserProfile, 
     Login, Register, VerifyOtp,
-    ChangeTwoStepPassword, CreateTwoStepPassword,LogoutView
+    ChangeTwoStepPassword, CreateTwoStepPassword,LogoutView,AddressCreateView,AddressUpdateView
 )
 
 app_name = "account"
@@ -18,4 +18,7 @@ urlpatterns = [
     path("change-two-step-password/", ChangeTwoStepPassword.as_view(), name="change-two-step-password"),
     path("create-two-step-password/", CreateTwoStepPassword.as_view(), name="create-two-step-password"),
     path("users/<int:pk>/", UsersDetailUpdateDelete.as_view(), name="users-detail"),
+    path('address/', AddressCreateView.as_view(), name='address-list'),
+    path('address/<user>/', AddressUpdateView.as_view(), name='address-detail'),
+
 ]
