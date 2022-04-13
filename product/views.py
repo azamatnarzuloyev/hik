@@ -1,18 +1,13 @@
 
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import  get_object_or_404
 from .paginations import CustomPagination
-# from flask import Response
-from rest_framework.views import APIView
 from rest_framework import generics, response, status, views, permissions
 from . import serializers
 from . import models
-from rest_framework.response import Response
+
 from .utils import (
-    setProductCategories,
-    saveProductImages,
-    removeProductImages,
-    addProductBrand,
+
     buildImage,
 )
 from rest_framework import filters ,pagination
@@ -91,18 +86,6 @@ class CategoryListCreate(generics.ListAPIView):
     queryset = models.Category.objects.filter(level=0)
     filter_backends = [filters.SearchFilter]
     search_fields = ["name"]
-
-
-
-   
-
- 
-
-
-
-
-
-
 class CategoryDetail(generics.ListAPIView):
     serializer_class = serializers.CategoryDetailSerializer
     queryset = models.Category.objects.all()

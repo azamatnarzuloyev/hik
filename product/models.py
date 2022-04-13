@@ -1,12 +1,8 @@
-
 from django.db import models
-from django.forms import CharField
-
 from django.utils.text import slugify
 import random, string
 from django.utils import timezone
 from django.urls import reverse
-from django.utils.text import gettext_lazy as _
 from PIL import Image as image
 from io import  BytesIO
 from django.core.files.base import ContentFile

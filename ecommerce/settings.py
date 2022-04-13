@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'product',
     'tolov',
     'filter',
+    'coupon',
     'search',
 
   
