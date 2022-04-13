@@ -46,7 +46,7 @@ def addOrderItems(request):
                 name=product.name,
                 qty=i['qty'],
                 price=i['price'],
-                # image=product.image.url
+                image=product.image.url
             )
 
             # (4) update stock
@@ -56,7 +56,6 @@ def addOrderItems(request):
         serializer = OrderSerializer(order, many=False)
         return Response(serializer.data)
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def getOrderById(request, pk):
     user = request.user
     order = Order.objects.get(_id=pk)
@@ -72,6 +71,7 @@ def getOrderById(request, pk):
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getMyOrders(request):
     user = request.user
     orders = user.order_set.all()
