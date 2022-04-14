@@ -22,6 +22,7 @@ class ProductsModelAdmin(admin.ModelAdmin):
         "name",
         "price",
         'image_tag',
+        'active',
 
       
     ]

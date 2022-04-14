@@ -52,12 +52,10 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'django_countries',
-    # 'drf_yasg',
     'ckeditor',
     'product',
     'tolov',
     'filter',
-    'coupon',
     'search',
 
   
@@ -215,13 +213,13 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    # 'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    # 'TEST_REQUEST_DEFAULT_FORMAT': 'json',
-    # 'TEST_REQUEST_RENDERER_CLASSES': [
-    #     'rest_framework.renderers.MultiPartRenderer',
-    #     'rest_framework.renderers.JSONRenderer',
-    #     'rest_framework.renderers.TemplateHTMLRenderer',
-    # ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'TEST_REQUEST_RENDERER_CLASSES': [
+        'rest_framework.renderers.MultiPartRenderer',
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.TemplateHTMLRenderer',
+    ],
     'ACCESS_TOKEN_LIFETIME': timedelta(days=30), 
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1), 
     'ROTATE_REFRESH_TOKENS': False, 
