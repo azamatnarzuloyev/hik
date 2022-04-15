@@ -14,5 +14,5 @@ urlpatterns = [
     ),
   
    path('doller/', views.DollerViews.as_view(), name='doller'),
-   path('productsearch/', views.ProductSearch.as_view(), name='searchproduct'),
+   path('productsearch/', views.ProductSearch.as_view(), name='productsearch'),
 ]
