@@ -51,7 +51,7 @@ class ProductListCreate(generics.ListAPIView):
  
     filter_backends = (fil.DjangoFilterBackend,)
     filterset_class = ProductFilter
-    pagination_class = CustomPagination
+    # pagination_class = CustomPagination
     # search_fields = ('name', 'categories__name')
     # ordering_fields = ('name', 'categories__name')
    

@@ -25,6 +25,6 @@ class FiltermodelSerializers(serializers.ModelSerializer):
 
     def get_categorystatuses(self, obj):
         objects = obj.categorystatuses.all()
-        data = [(categoryStatus.slug) for categoryStatus in objects]
+        data = [(categoryStatus.name) for categoryStatus in objects]
         return data
     
