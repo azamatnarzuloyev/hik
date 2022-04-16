@@ -1,5 +1,3 @@
-
-
 from django.shortcuts import  get_object_or_404
 from .paginations import CustomPagination
 from rest_framework import generics, response, status, views, permissions
@@ -86,6 +84,7 @@ class CategoryListCreate(generics.ListAPIView):
     queryset = models.Category.objects.filter(level=0)
     filter_backends = [filters.SearchFilter]
     search_fields = ["name"]
+    
 class CategoryDetail(generics.ListAPIView):
     serializer_class = serializers.CategoryDetailSerializer
     queryset = models.Category.objects.all()
