@@ -162,7 +162,9 @@ class Productallfilter(models.Model):
     def __str__(self):
         return self.name
 
-
+    def save(self, *args, **kwargs):
+        self.name = self.name.upper()
+        return super(Productallfilter, self).save(*args, **kwargs)
 
 
 class Product(models.Model):

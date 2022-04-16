@@ -13,7 +13,9 @@ class Children(models.Model):
 
     def __str__(self):
         return self.name
-
+    def save(self, *args, **kwargs):
+        self.name = self.name.upper()
+        return super(Children, self).save(*args, **kwargs)
 
 class FIlterProduct(models.Model):
     categories = TreeForeignKey(
