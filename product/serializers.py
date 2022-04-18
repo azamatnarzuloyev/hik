@@ -2,6 +2,12 @@
 from rest_framework import serializers
 from . import models
 
+class DOllerSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = models.Doller
+        fields = ['kurs']
+
+
 class StatuSerializer(serializers.ModelSerializer):
     class Meta:
         fields= "__all__"
@@ -46,7 +52,6 @@ class CategorySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("This category already exists!")
         return data
  
-       
 
 
 class CategorySerializerMini(CategorySerializer):
@@ -58,8 +63,7 @@ class ProductListMini(serializers.ModelSerializer):
     categories = CategorySerializerMini(read_only=True)
     image = serializers.SerializerMethodField()
     categorystatuses = serializers.SerializerMethodField()
-    
- 
+    productallfilter = serializers.SerializerMethodField()
     class Meta:
         model = models.Product
         fields = (
@@ -67,19 +71,24 @@ class ProductListMini(serializers.ModelSerializer):
             "name",
             "slug",
             'mgpiksel',
+            'productallfilter',
             'categorystatuses',
             'categories',
             "price",
             "image",
-            "image_count",   
+            "image_count", 
+      
         )
     def get_categorystatuses(self, obj):
         objects = obj.categorystatuses.all()
-        data = [(categoryStatus.slug) for categoryStatus in objects]
+        data = [(categoryStatus.name) for categoryStatus in objects]
+        return data
+    def get_productallfilter(self, obj):
+        objects = obj.productallfilter.all()
+        data = [(productallfilter.name) for productallfilter in objects]
         return data
 
-
-        extra_kwargs = {"price": {"read_only": True}}
+    extra_kwargs = {"price": {"read_only": True}}
 
 
     def get_image(self, obj):
@@ -126,7 +135,6 @@ class ProductListCreate(serializers.ModelSerializer):
     categorystatuses = serializers.SerializerMethodField()
     brand = BrandSerializer(read_only=True)
     slug = serializers.ReadOnlyField()
-
     market_price =serializers.IntegerField(read_only=True)
     categories = CategorySerializerMini(read_only=True)
     class Meta:
@@ -136,6 +144,7 @@ class ProductListCreate(serializers.ModelSerializer):
             "slug",
             "name",
             'mgpiksel',
+            # 'filter',
             "categories",
             'categorystatuses',
             "description",
@@ -152,7 +161,7 @@ class ProductListCreate(serializers.ModelSerializer):
 
     def get_categorystatuses(self, obj):
         objects = obj.categorystatuses.all()
-        data = [(categorystatus.slug) for categorystatus in objects]
+        data = [(categorystatus.name) for categorystatus in objects]
         return data
 
 class BannerAdSerializer(serializers.ModelSerializer):

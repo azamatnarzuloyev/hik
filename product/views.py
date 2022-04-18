@@ -1,18 +1,11 @@
-
-
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import  get_object_or_404
 from .paginations import CustomPagination
-# from flask import Response
-from rest_framework.views import APIView
 from rest_framework import generics, response, status, views, permissions
 from . import serializers
 from . import models
-from rest_framework.response import Response
+
 from .utils import (
-    setProductCategories,
-    saveProductImages,
-    removeProductImages,
-    addProductBrand,
+
     buildImage,
 )
 from rest_framework import filters ,pagination
@@ -30,23 +23,13 @@ class ProductFilter(fil.FilterSet):
 
     class Meta:
         model = models.Product
-        fields = ['name','categories__slug','brand','categorystatuses__slug',  'mgpiksel',]
+        fields = ['name','categories__slug','brand','categorystatuses__name','productallfilter__name' , 'mgpiksel',]
 
 
-# class ProductList(generics.ListAPIView):
-#     queryset = models.Product.objects.all()
-#     serializer_class = serializers.ProductListCreate
-#     filter_backends = (fil.DjangoFilterBackend,)
-#     filterset_class = ProductFilter
-    
-     
 
-# class CategoryProductViews(APIView):
-#     def get(self, query=None):
-#         queryset = models.Product.objects.filter(categories_slug=query)
-#         serializer = serializers.ProductListMini(queryset, many=True)
-#         return (serializer.data)
-
+class DollerViews(generics.ListAPIView):
+    serializer_class = serializers.DOllerSerializers
+    queryset  = models.Doller.objects.all()
 
 
 class TopProducts(generics.ListAPIView):
@@ -56,21 +39,17 @@ class TopProducts(generics.ListAPIView):
         queryset = models.Product.objects.filter(available=True).order_by("?")[:20]
         return queryset
 
-        # if self.request.user.is_authenticated and self.request.user.has_perms:
-        #     return queryset.all()
-        # return queryset.filter(available=True).order_by("?")[:20]
-
 
 class ProductListCreate(generics.ListAPIView):
     serializer_class = serializers.ProductListCreate
     queryset = models.Product.objects.all()
-    # filter_backends = [filters.SearchFilter]
-    # search_fields = ["name"]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["name"]
     lookup_field = "slug"
  
     filter_backends = (fil.DjangoFilterBackend,)
     filterset_class = ProductFilter
-    # pagination_class = CustomPagination
+    pagination_class = CustomPagination
     # search_fields = ('name', 'categories__name')
     # ordering_fields = ('name', 'categories__name')
    
@@ -78,18 +57,8 @@ class ProductListCreate(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         self.serializer_class = serializers.ProductListMini
         return super().get(request, *args, **kwargs)
-    # pagination_class = CustomPagination
-    # def perform_create(self, serializer):
-    #     category_data = self.request.data.get("categories")
-    #     brand_data = self.request.data.get("brand")
-    #     data = {}
-    #     data["brand"] = addProductBrand(brand_data)
-
-    #     product = serializer.save(**data)
-
-    #     addProductBrand(brand_data)
-    #     setProductCategories(self.request, product)
-    #     saveProductImages(self.request, product)
+      
+  
 
 
 class ProductDetail(generics.RetrieveAPIView):
@@ -99,26 +68,14 @@ class ProductDetail(generics.RetrieveAPIView):
     filter_backends = (fil.DjangoFilterBackend,)
     filterset_class = ProductFilter
     
-
-    # def perform_update(self, serializer):
-    #     brand_data = self.request.data.get("brand")
-    #     data = {}
-    #     data["brand"] = addProductBrand(brand_data)
-
-    #     product = serializer.save(**data)
-
-    #     saveProductImages(self.request, product)
-    #     setProductCategories(self.request, product)
-    #     removeProductImages(self.request)
-
-    # def _allowed_methods(self):
-    #     return [
-    #         m
-    #         for m in super(ProductDetail, self)._allowed_methods()
-    #         if m not in ["PATCH", "DELETE", "HEAD", "OPTIONS", "PUT"]
-    #     ]
-
-
+    
+class ProductSearch(generics.ListAPIView):
+    serializer_class = serializers.ProductListCreate
+    queryset = models.Product.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["name", "categories__slug"]
+    lookup_field = "slug"
+   
 
 
 
@@ -127,27 +84,7 @@ class CategoryListCreate(generics.ListAPIView):
     queryset = models.Category.objects.filter(level=0)
     filter_backends = [filters.SearchFilter]
     search_fields = ["name"]
-
-
-
-
-# class CategoryProduct(APIView):
-#     """
-#     Return product by category
-#     """
-#     def get(self, request, query=None):
-#         queryset = models.Product.objects.filter(category__slug=query)
-#         serializer = serializers.ProductListCreate(queryset, many=True)
-#         return Response(serializer.data)
-   
-
- 
-
-
-
-
-
-
+    
 class CategoryDetail(generics.ListAPIView):
     serializer_class = serializers.CategoryDetailSerializer
     queryset = models.Category.objects.all()

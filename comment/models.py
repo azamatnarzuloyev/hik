@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth import get_user_model
+from ecommerce.settings import AUTH_USER_MODEL
 from django.db import models
 
 from .managers import CommentManager
@@ -11,7 +11,7 @@ from .managers import CommentManager
 
 class Comment(models.Model):
     user = models.ForeignKey(
-        get_user_model(),
+        AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="comments",
         verbose_name=_("User"),

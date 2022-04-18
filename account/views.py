@@ -3,10 +3,12 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
-
+from .models import Address
 from rest_framework.generics import (
     ListAPIView,
     RetrieveUpdateDestroyAPIView,
+    CreateAPIView,
+    RetrieveUpdateAPIView,
 )
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -23,11 +25,53 @@ from .serializers import (
     OtpSerializer,
     ChangeTwoStepPasswordSerializer,
     CreateTwoStepPasswordSerializer,
+    AddressSerializer,
 )
 from .models import PhoneOtp 
 from .send_otp import send_otp
 from permissions import IsSuperUser
 
+
+class LogoutView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+
+            return Response(status=status.HTTP_205_RESET_CONTENT,content_type="status seksesfull")
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST, content_type="status error")
+
+
+class AddressCreateView(CreateAPIView):
+
+    permission_classes = (IsAuthenticated,)
+    serializer_class = AddressSerializer
+    queryset = Address.objects.all()
+
+    def post(self, request):
+        address = Address.objects.filter(user=self.request.user)
+        if address.exists():
+            return Response({"error": "You already have an address. Edit it"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        serializer = self.serializer_class(data=self.request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user=self.request.user)
+            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AddressUpdateView(RetrieveUpdateAPIView):
+    '''
+    Retrieve or Update Address details by User ID.
+    '''
+    permission_classes = (IsAuthenticated,)
+    serializer_class = AddressSerializer
+    queryset = Address.objects.all()
+    lookup_field = 'user'
 
 class UsersList(ListAPIView):
     """
@@ -57,18 +101,7 @@ class UsersList(ListAPIView):
 
 
 class UsersDetailUpdateDelete(RetrieveUpdateDestroyAPIView):
-    """
-    get:
-        Returns the detail of a user instance.
-        parameters: [pk]
-    put:
-        Update the detail of a user instance
-        parameters: exclude[password,]
-    delete:
-        Delete a user instance.
-        
-        parameters: [pk]
-    """
+
 
     serializer_class = UserDetailUpdateDeleteSerializer
     permission_classes = [
@@ -101,6 +134,8 @@ class UserProfile(RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         return self.request.user
+
+
 
 
 class Login(APIView):
