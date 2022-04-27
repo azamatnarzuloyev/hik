@@ -81,7 +81,7 @@ class ProductListMini(serializers.ModelSerializer):
         )
     def get_categorystatuses(self, obj):
         objects = obj.categorystatuses.all()
-        data = [(categoryStatus.slug) for categoryStatus in objects]
+        data = [(categoryStatus.name) for categoryStatus in objects]
         return data
     def get_productallfilter(self, obj):
         objects = obj.productallfilter.all()
@@ -161,7 +161,7 @@ class ProductListCreate(serializers.ModelSerializer):
 
     def get_categorystatuses(self, obj):
         objects = obj.categorystatuses.all()
-        data = [(categorystatus.slug) for categorystatus in objects]
+        data = [(categorystatus.name) for categorystatus in objects]
         return data
 
 class BannerAdSerializer(serializers.ModelSerializer):

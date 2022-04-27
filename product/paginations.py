@@ -16,6 +16,6 @@ class CustomPagination(pagination.PageNumberPagination):
             'current_page':self.page.number,
             'total_pages':self.page.paginator.num_pages,
             'items_page' : len(self.page),
-            'products': data
+            'results': data
             
         })

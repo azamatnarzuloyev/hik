@@ -80,22 +80,15 @@ class PhoneOtp(models.Model):
         return self.phone
 
 class Address(models.Model):
-    GENDER_CHOICES = [
-        ('F', 'Female'),
-        ('M', 'Male'),
-        ('N', 'Unspecified'),
-    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # phone_number = PhoneNumberField(blank=True, null=True, help_text='Eg +234, +233')
     phone_nuber = models.CharField(max_length=13)
-    # gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='N')
     address_line_1 = models.TextField()
     address_line_2 = models.TextField(blank=True, null=True)
     address_line_3 = models.TextField(blank=True, null=True)
     address_line_4 = models.TextField(blank=True, null=True)
     town_city = models.TextField(help_text='Enter residing city or town')
     state = models.CharField(max_length=50)
-    # country = CountryField(blank_label='(select country)', multiple=False)
+   
 
 
     class Meta:
