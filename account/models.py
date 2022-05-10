@@ -83,13 +83,10 @@ class Address(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_nuber = models.CharField(max_length=13)
     address_line_1 = models.TextField()
-    address_line_2 = models.TextField(blank=True, null=True)
-    address_line_3 = models.TextField(blank=True, null=True)
-    address_line_4 = models.TextField(blank=True, null=True)
     town_city = models.TextField(help_text='Enter residing city or town')
     state = models.CharField(max_length=50)
    
-
+  
 
     class Meta:
         verbose_name_plural = 'Addresses'

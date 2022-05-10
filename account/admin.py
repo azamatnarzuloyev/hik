@@ -5,7 +5,14 @@ from django.contrib import admin
 from .models import User, PhoneOtp,Address
 
 # Register your models here.
-admin.site.register(Address)
+
+
+@admin.register(Address)
+class AdressAdmin(admin.ModelAdmin):
+    list_display = ( 
+        'user','state',
+    )
+    search_fields = ('user',)
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
