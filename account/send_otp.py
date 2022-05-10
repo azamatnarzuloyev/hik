@@ -34,6 +34,3 @@ def send_otp(*, user_otp: object, phone: str):
         response.json(),
         status=status.HTTP_200_OK,
     )
-    print(response.text)
-  
-    print(otp)

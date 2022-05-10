@@ -76,6 +76,7 @@ class ProductListMini(serializers.ModelSerializer):
             'categories',
             "price",
             "image",
+            'active',
             "image_count", 
       
         )
@@ -153,6 +154,7 @@ class ProductListCreate(serializers.ModelSerializer):
             "colors",
             "price",
             "available",
+            'active',
             "images",
             'texttitle',
             'text',

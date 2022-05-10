@@ -3,7 +3,7 @@ from django.contrib.auth.models import BaseUserManager
 
 class CustomUserManager(BaseUserManager):
     def _create_user(self, phone, **extra_fields):
-        """
+        """   
         Create and save a user with the given phone.
         """
         if not phone:

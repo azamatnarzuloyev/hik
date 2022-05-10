@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'tolov',
     'filter',
     'search',
+    'Banner',
 
   
 ]
