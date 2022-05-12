@@ -184,7 +184,7 @@ from datetime import timedelta
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = str(BASE_DIR.joinpath('static'))
 MEDIA_URL = "/media/"
 # MEDIA_ROOT = "media"
