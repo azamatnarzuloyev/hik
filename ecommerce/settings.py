@@ -23,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env.str("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG =env.bool('DEBUG', default=False)
-DEBUG =False
 
+DEBUG = False
 
-ALLOWED_HOSTS = ['.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['64.227.123.156','127.0.0.1']
 
 
 # Application definition
@@ -129,19 +129,19 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 # }
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'hik',
-#         'USER': 'hik',
-#         'PASSWORD': 'hik',
-#         'HOST': '',
-#         'PORT': '',
-#     }
-# }
 DATABASES = {
-    "default": env.dj_db_url("DATABASE_URL")      
-  } 
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('POSTRGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'PORT': '5432',
+    }
+}
+# DATABASES = {
+#     "default": env.dj_db_url("DATABASE_URL")      
+#   } 
 
 
 
