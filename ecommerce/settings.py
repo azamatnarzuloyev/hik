@@ -190,7 +190,7 @@ MEDIA_URL = "/media/"
 # MEDIA_ROOT = "media"
 
 MEDIA_ROOT = str(BASE_DIR.joinpath('media'))
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
