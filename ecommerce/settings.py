@@ -26,7 +26,7 @@ SECRET_KEY = env.str("SECRET_KEY")
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['64.227.123.156','127.0.0.1']
+ALLOWED_HOSTS = ['138.68.108.160','127.0.0.1']
 
 
 # Application definition
