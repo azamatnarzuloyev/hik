@@ -75,11 +75,7 @@ JAZZMIN_SETTINGS = {
 }
 CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ORIGIN_WHITELIST = [
-    'http://buyy.herokuapp.com',
-    'https://buyy.herokuapp.com',
-    
-]
+
 CLICK_SETTINGS = {
     'service_id':'1',
     'merchant_id':'1',
