@@ -24,11 +24,10 @@ SECRET_KEY = env.str("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG =env.bool('DEBUG', default=False)
 
-<<<<<<< HEAD
 DEBUG =False
 =======
 DEBUG = True
->>>>>>> acbad88b3218093b8840497ce7ffae57bfe79731
+
 
 ALLOWED_HOSTS = ['138.68.108.160','127.0.0.1']
 
@@ -187,13 +186,8 @@ from datetime import timedelta
 STATIC_URL = '/static/'
 STATIC_ROOT = str(BASE_DIR.joinpath('static'))
 MEDIA_URL = "/media/"
-<<<<<<< HEAD
-# MEDIA_ROOT = "media"
-=======
 
 
->>>>>>> acbad88b3218093b8840497ce7ffae57bfe79731
-# MEDIA_ROOT = str(BASE_DIR.joinpath('media'))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
