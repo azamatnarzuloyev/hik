@@ -25,8 +25,8 @@ class OrderProduct(models.Model):
 class Order(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, to_field='id')
-    ref_code = models.CharField(max_length=250, blank=True, null=True)
-    shipping_address = models.ForeignKey(Address, on_delete=models.SET_NULL, blank=True, null=True)
+#     ref_code = models.CharField(max_length=250, blank=True, null=True)
+#     shipping_address = models.ForeignKey(Address, on_delete=models.SET_NULL, blank=True, null=True)
     payment = models.ForeignKey('Payment', on_delete=models.SET_NULL, blank=True, null=True)
     order_items = models.ManyToManyField(OrderProduct)
     ordered = models.BooleanField(default=False, blank=True)
