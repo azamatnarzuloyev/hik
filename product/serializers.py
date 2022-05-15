@@ -69,8 +69,7 @@ class ProductListMini(serializers.ModelSerializer):
         fields = (
             "id",
             "name",
-            "slug",
-            'mgpiksel',
+            "slug"
             'productallfilter',
             'categorystatuses',
             'categories',
@@ -131,10 +130,8 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
 
 
 class ProductListCreate(serializers.ModelSerializer):
-    colors = serializers.JSONField(required=False)
     images = ImageSerializer(required=False, read_only=True, many=True)
     categorystatuses = serializers.SerializerMethodField()
-    brand = BrandSerializer(read_only=True)
     slug = serializers.ReadOnlyField()
     market_price =serializers.IntegerField(read_only=True)
     categories = CategorySerializerMini(read_only=True)
@@ -144,14 +141,9 @@ class ProductListCreate(serializers.ModelSerializer):
             "id",
             "slug",
             "name",
-            'mgpiksel',
-            # 'filter',
             "categories",
             'categorystatuses',
-            "description",
-            "brand",
-            'market_price',
-            "colors",
+            'market_price'
             "price",
             "available",
             'active',

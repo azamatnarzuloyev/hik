@@ -168,8 +168,6 @@ class Productallfilter(models.Model):
 
 
 class Product(models.Model):
-  
-    mgpiksel = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     slug = models.SlugField(unique=True, editable=False, null=False, blank=True)
     categories = TreeForeignKey(
@@ -180,8 +178,7 @@ class Product(models.Model):
     productallfilter = models.ManyToManyField(Productallfilter)
     categorystatuses = models.ManyToManyField(CategoryStatus, blank=True)
     quantit = models.IntegerField(default=1, null=False, blank=True)
-    description = models.TextField(blank=True, null=True)
-    brand = models.ForeignKey(Brand, models.CASCADE, blank=True, null=True)
+    # brand = models.ForeignKey(Brand, models.CASCADE, blank=True, null=True)
     price = models.IntegerField()
     active = models.BooleanField(default=True)
     available = models.BooleanField(default=True)
