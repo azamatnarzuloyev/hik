@@ -28,7 +28,7 @@ SECRET_KEY = env.str("SECRET_KEY")
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['138.68.108.160','127.0.0.1','ip-camera-hik.tk']
+ALLOWED_HOSTS = ['138.68.108.160','127.0.0.1','ip-camera-hik.uz']
 
 
 # Application definition
