@@ -28,7 +28,7 @@ SECRET_KEY = env.str("SECRET_KEY")
 DEBUG = False
 
 
-ALLOWED_HOSTS = ['smartsytem.uz','206.189.51.183']
+ALLOWED_HOSTS = ['smartsytem.uz']
 
 
 # Application definition
