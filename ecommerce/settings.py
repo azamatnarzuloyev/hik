@@ -25,7 +25,7 @@ SECRET_KEY = env.str("SECRET_KEY")
 # DEBUG =env.bool('DEBUG', default=False)
 
 
-DEBUG = True
+DEBUG = False
 
 
 ALLOWED_HOSTS = ['smartsytem.uz','206.189.51.183']
