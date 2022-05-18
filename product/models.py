@@ -179,7 +179,7 @@ class Product(models.Model):
     categorystatuses = models.ManyToManyField(CategoryStatus, blank=True)
     quantit = models.IntegerField(default=1, null=False, blank=True)
     # brand = models.ForeignKey(Brand, models.CASCADE, blank=True, null=True)
-    price = models.IntegerField(blank=True, null=True)
+    price = models.FloatField(blank=True, null=True)
     active = models.BooleanField(default=True)
     available = models.BooleanField(default=False)
     texttitle = RichTextField()
