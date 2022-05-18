@@ -1,5 +1,9 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.conf import settings
+from django.urls import path, include,re_path
+from django.http import HttpResponse
+
+from django.views.generic import TemplateView
 
 from django.conf.urls.static import static
 
@@ -12,8 +16,9 @@ from drf_spectacular.views import (
     SpectacularRedocView, 
     SpectacularSwaggerView
 )
-from django.conf import settings
+
 urlpatterns = [
+   
    path('admin/', admin.site.urls),
    path('api/v1/', include("product.urls")),
    path('api/v1/account/', include('account.urls', namespace='account')),
@@ -32,10 +37,24 @@ urlpatterns = [
 ] 
 
     # add root static files
-urlpatterns = urlpatterns + static(
+
+urlpatterns += static(
         settings.STATIC_URL, document_root=settings.STATIC_ROOT
-    )
-#     # add media static files
-urlpatterns = urlpatterns + static(
+        )
+        # add media static files
+urlpatterns += static(
         settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
-    )
+        )
+
+
+# handler404 = 'myapp.views.error_404_view'
+
+
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL,
+#                           document_root=settings.MEDIA_ROOT)
+
+
+if  settings.DEBUG:
+    urlpatterns += [re_path(r'^.*',
+                            TemplateView.as_view(template_name='404.html'))]

@@ -223,7 +223,7 @@ class Product(models.Model):
         if self.name:
             self.name = self.name.strip()
         if not self.slug:
-            self.slug = self.make_slug(self.name)
+              self.slug = self.make_slug(self.name)
         super().save(*args, **kwargs)
 
     class Meta:

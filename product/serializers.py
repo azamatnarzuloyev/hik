@@ -69,7 +69,7 @@ class ProductListMini(serializers.ModelSerializer):
         fields = (
             "id",
             "name",
-            "slug"
+            "slug",
             'productallfilter',
             'categorystatuses',
             'categories',
@@ -83,6 +83,7 @@ class ProductListMini(serializers.ModelSerializer):
         objects = obj.categorystatuses.all()
         data = [(categoryStatus.name) for categoryStatus in objects]
         return data
+
     def get_productallfilter(self, obj):
         objects = obj.productallfilter.all()
         data = [(productallfilter.name) for productallfilter in objects]
@@ -143,7 +144,6 @@ class ProductListCreate(serializers.ModelSerializer):
             "name",
             "categories",
             'categorystatuses',
-            'market_price'
             "price",
             "available",
             'active',
