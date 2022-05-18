@@ -69,7 +69,7 @@ class ProductListMini(serializers.ModelSerializer):
         fields = (
             "id",
             "name",
-            "slug"
+            "slug",
             'productallfilter',
             'categorystatuses',
             'categories',
