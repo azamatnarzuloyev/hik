@@ -134,7 +134,6 @@ class ProductListCreate(serializers.ModelSerializer):
     images = ImageSerializer(required=False, read_only=True, many=True)
     categorystatuses = serializers.SerializerMethodField()
     slug = serializers.ReadOnlyField()
-    market_price =serializers.IntegerField(read_only=True)
     categories = CategorySerializerMini(read_only=True)
     class Meta:
         model = models.Product
