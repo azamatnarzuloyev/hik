@@ -12,6 +12,7 @@ class filtersproduct(fil.FilterSet):
     class Meta:
         model = FIlterProduct
         fields = ['categories__slug','categorystatuses__name',]
+        
 
 
 

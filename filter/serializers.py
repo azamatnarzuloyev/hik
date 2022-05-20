@@ -12,7 +12,8 @@ class ChildrenSerializers(serializers.ModelSerializer):
 
 class FiltermodelSerializers(serializers.ModelSerializer):
     childrens = serializers.SerializerMethodField()
-    categories = CategorySerializerMini(read_only=True)
+    # categories = CategorySerializerMini(read_only=True)
+    categories = serializers.SerializerMethodField()
     categorystatuses = serializers.SerializerMethodField()
     class Meta:
         model = FIlterProduct
@@ -26,5 +27,10 @@ class FiltermodelSerializers(serializers.ModelSerializer):
     def get_categorystatuses(self, obj):
         objects = obj.categorystatuses.all()
         data = [(categoryStatus.name) for categoryStatus in objects]
+        return data
+
+    def get_categories(self, obj):
+        objects = obj.categories.all()
+        data = [(categories.slug) for categories in objects]
         return data
     
