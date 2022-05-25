@@ -205,9 +205,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'permissions.IsSuperUserOrReadOnly',
-    # ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'permissions.IsSuperUserOrReadOnly',
+    ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.SearchFilter',
@@ -224,12 +224,17 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.TemplateHTMLRenderer',
     ],
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=30), 
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1), 
-    'ROTATE_REFRESH_TOKENS': False, 
-    'BLACKLIST_AFTER_ROTATION': True, 
-    'UPDATE_LAST_LOGIN': False, 
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+    
+    'DEFAULT_THROTTLE_RATES': {
+        "authentication": "5/hour",
+        "verify_authentication": "8/hour",
+    },
+    # 'ACCESS_TOKEN_LIFETIME': timedelta(days=30), 
+    # 'REFRESH_TOKEN_LIFETIME': timedelta(days=1), 
+    # 'ROTATE_REFRESH_TOKENS': False, 
+    # 'BLACKLIST_AFTER_ROTATION': True, 
+    # 'UPDATE_LAST_LOGIN': False, 
+    # 'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
     # # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 12
@@ -246,4 +251,4 @@ SPECTACULAR_SETTINGS = {
     'REDOC_DIST': 'SIDECAR',
 }
 
-EXPIRY_TIME_OTP = 60
+EXPIRY_TIME_OTP = 300
