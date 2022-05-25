@@ -33,4 +33,4 @@ class FiltermodelSerializers(serializers.ModelSerializer):
         objects = obj.categories.all()
         data = [(categories.slug) for categories in objects]
         return data
-    
+      
