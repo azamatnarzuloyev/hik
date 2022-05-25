@@ -232,7 +232,7 @@ REST_FRAMEWORK = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
     # # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20
+    'PAGE_SIZE': 12
 }
 
 
@@ -246,4 +246,4 @@ SPECTACULAR_SETTINGS = {
     'REDOC_DIST': 'SIDECAR',
 }
 
-EXPIRY_TIME_OTP = 300
+EXPIRY_TIME_OTP = 3000
