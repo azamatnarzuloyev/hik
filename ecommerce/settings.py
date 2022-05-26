@@ -75,8 +75,8 @@ JAZZMIN_SETTINGS = {
     "site_header": "HIKVISION",
     "site_brand": "HIKVISION",
 }
-# CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_ALLOW_ALL = False
 # CORS_ORIGIN_WHITELIST = (
 #     'http://localhost:3000',
 #     'http://localhost:8000'
@@ -172,9 +172,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Tashkent'
+TIME_ZONE = 'Asia/Tashkent' 
+# TIME_ZONE = 'UTC'
 
 USE_I18N = True
+
 USE_L10N=True
 
 USE_TZ = True
@@ -229,12 +231,12 @@ REST_FRAMEWORK = {
         "authentication": "5/hour",
         "verify_authentication": "8/hour",
     },
-    # 'ACCESS_TOKEN_LIFETIME': timedelta(days=30), 
-    # 'REFRESH_TOKEN_LIFETIME': timedelta(days=1), 
-    # 'ROTATE_REFRESH_TOKENS': False, 
-    # 'BLACKLIST_AFTER_ROTATION': True, 
-    # 'UPDATE_LAST_LOGIN': False, 
-    # 'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+#     'ACCESS_TOKEN_LIFETIME': timedelta(days=30), 
+#     'REFRESH_TOKEN_LIFETIME': timedelta(days=1), 
+    'ROTATE_REFRESH_TOKENS': False, 
+    'BLACKLIST_AFTER_ROTATION': True, 
+    'UPDATE_LAST_LOGIN': False, 
+#     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
     # # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_PAGINATION_CLASS': 'ecommerce.utils.custom_pagination.CustomPagination',
     'PAGE_SIZE': 12,
