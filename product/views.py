@@ -23,7 +23,7 @@ class ProductFilter(fil.FilterSet):
 
     class Meta:
         model = models.Product
-        fields = ['name','categories__slug','categorystatuses__name','productallfilter__name' ,]
+        fields = ['name','categories__slug','categorystatuses__name','productallfilter__name',"available" ,]
 
 
 
