@@ -74,6 +74,7 @@ class ProductListMini(serializers.ModelSerializer):
             'categorystatuses',
             'categories',
             "price",
+            "available",
             "image",
             'active',
             "image_count", 
