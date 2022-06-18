@@ -37,6 +37,9 @@ class ProductsModelAdmin(admin.ModelAdmin):
         "name", 
      
     ]
+    list_editable = [
+        "active",
+    ]
 
 @admin.register(models.Doller)
 class DollersModelAdmin(admin.ModelAdmin):
