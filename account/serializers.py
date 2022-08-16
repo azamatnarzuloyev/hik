@@ -62,9 +62,8 @@ class OtpSerializer(serializers.Serializer):
     def validate_code(self, value):
         try:
             int(value)
-        except ValueError as _:
-            raise serializers.ValidationError("Invalid Code.")
-
+        except ValueError as e:
+            raise serializers.ValidationError("Invalid Code.") from e
         return value
 
 

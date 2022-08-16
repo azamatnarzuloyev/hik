@@ -10,9 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
-from decouple import config
+from datetime import timedelta
 from pathlib import Path
+
+from decouple import config
 from environs import Env
+
 env = Env()
 env.read_env()
 
@@ -20,7 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 
-SECRET_KEY = env.str("SECRET_KEY")
+# SECRET_KEY = env.str("SECRET_KEY")
+SECRET_KEY = 'django-insecure-m5f!ousf=baq*e92#0*3*kvh6y^t$kiq$7thmqn$g+!541rplt'
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG =env.bool('DEBUG', default=False)
 
@@ -28,7 +32,7 @@ SECRET_KEY = env.str("SECRET_KEY")
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['smartsytem.uz']
+ALLOWED_HOSTS = ['smartsytem.uz' , '*']
 
 
 # Application definition
@@ -123,24 +127,24 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('POSTRGRES_DB'),
-        'USER': os.environ.get('POSTGRES_USER'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': os.environ.get('POSTGRES_HOST'),
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': os.environ.get('POSTRGRES_DB'),
+#         'USER': os.environ.get('POSTGRES_USER'),
+#         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+#         'HOST': os.environ.get('POSTGRES_HOST'),
+#         'PORT': '5432',
+#     }
+# }
 # DATABASES = {
 #     "default": env.dj_db_url("DATABASE_URL")      
 #   } 
@@ -183,8 +187,6 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'account.User'
 # SITE_ID=1
-from datetime import timedelta
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -203,6 +205,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 import os
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 

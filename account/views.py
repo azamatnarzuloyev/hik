@@ -250,73 +250,70 @@ class VerifyOtp(APIView):
     # When the confirm_for_authentication attribute equals True, through jwt, the token is generated for authentication
     confirm_for_authentication = False
 
-    def post(self, request):
+    def post(self, request):  # sourcery skip: avoid-builtin-shadow
         serializer = OtpSerializer(data=request.data)
-        if serializer.is_valid():
-            received_code = serializer.data.get("code")
-            query = PhoneOtp.objects.filter(otp=received_code)
-
-            if not query.exists():
-                return Response(
-                    {
-                        "Incorrect code.": "The code entered is incorrect.",
-                    },
-                    status=status.HTTP_406_NOT_ACCEPTABLE,
-                )
-
-            object = query.first()
-            code_in_cache = cache.get(object.phone)
-
-            if code_in_cache is not None:
-                if code_in_cache == received_code:
-                    user, created = get_user_model().objects.get_or_create(phone=object.phone)
-                    if user.two_step_password:
-                        password = serializer.data.get("password")
-                        check_password: bool = user.check_password(password)
-                        if check_password:
-                            self.confirm_for_authentication = True
-                        else:
-                            return Response(
-                                {
-                                    "Incorrect password.": "The password entered is incorrect.",
-                                },
-                                status=status.HTTP_406_NOT_ACCEPTABLE,
-                            )
-                    else:
-                        self.confirm_for_authentication = True
-
-                    if self.confirm_for_authentication:
-                        refresh = RefreshToken.for_user(user)
-                        cache.delete(object.phone)
-                        object.verify, object.count = True, 0
-                        object.save(update_fields=["verify", "count"])
-                        context = {
-                            "created": created,
-                            "refresh": str(refresh),
-                            "access": str(refresh.access_token),
-                        }
-                        return Response(
-                            context, 
-                            status=status.HTTP_200_OK,
-                        )
-                else:
-                    return Response(
-                        {
-                            "Incorrect code.": "The code entered is incorrect.",
-                        },
-                        status=status.HTTP_406_NOT_ACCEPTABLE,
-                    )
-            else:
-                return Response(
-                    {
-                        "Code expired.": "The entered code has expired.",
-                    },
-                    status=status.HTTP_408_REQUEST_TIMEOUT,
-                )
-        else:
+        if not serializer.is_valid():
             return Response(
                 serializer.errors, 
                 status=status.HTTP_400_BAD_REQUEST,
+            )
+        received_code = serializer.data.get("code")
+        query = PhoneOtp.objects.filter(otp=received_code)
+
+        if not query.exists():
+            return Response(
+                {
+                    "Incorrect code.": "The code entered is incorrect.",
+                },
+                status=status.HTTP_406_NOT_ACCEPTABLE,
+            )
+
+        object = query.first()
+        # code_in_cache = cache.get(object.phone)
+
+        # if code_in_cache is None:
+        #     return Response(
+        #         {
+        #             "Code expired.": "The entered code has expired.",
+        #         },
+        #         status=status.HTTP_408_REQUEST_TIMEOUT,
+        #     )
+        # if code_in_cache != received_code:
+        #     return Response(
+        #         {
+        #             "Incorrect code.": "The code entered is incorrect.",
+        #         },
+        #         status=status.HTTP_406_NOT_ACCEPTABLE,
+            # )
+        user, created = get_user_model().objects.get_or_create(phone=object.phone)
+        if user.two_step_password:
+            password = serializer.data.get("password")
+            check_password: bool = user.check_password(password)
+            if check_password:
+                self.confirm_for_authentication = True
+            else:
+                return Response(
+                    {
+                        "Incorrect password.": "The password entered is incorrect.",
+                    },
+                    status=status.HTTP_406_NOT_ACCEPTABLE,
+                )
+        else:
+            self.confirm_for_authentication = True
+
+        if self.confirm_for_authentication:
+            refresh = RefreshToken.for_user(user)
+            # cache.delete(object.phone)
+            object.verify, object.count = True, 0
+            object.save(update_fields=["verify", "count"])
+            context = {
+                "created": created,
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            }
+            return Response(
+                context, 
+                status=status.HTTP_200_OK,
             )
 
 
