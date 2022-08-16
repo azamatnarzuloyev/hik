@@ -13,6 +13,7 @@ import requests
 def send_otp(*, user_otp: object, phone: str):
     otp = otp_generator()
     user_otp.otp = otp
+    cache.set( phone, settings.EXPIRY_TIME_OTP)
     cache.set(phone, otp, settings.EXPIRY_TIME_OTP)
     # external_api_url = f'https://api.telegram.org/bot5245455385:AAGIxYYiHeul7EqguviPZtprUbzu_Te-Zh4/sendMessage?chat_id=-1001638264258&parse_mode=html&text="{otp}"'
     # res = requests.post(external_api_url)    
