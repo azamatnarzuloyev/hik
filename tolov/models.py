@@ -51,3 +51,27 @@ class ShippingAddress(models.Model):
 
     def __str__(self):
         return str(self.address)
+    
+
+
+
+class OrderPayment(models.Model):
+    type_status = (
+        (1, "Yaratildi"),
+        (2, "To'landi"),
+        (3, "Bekor qilindi"),
+    )
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
+    amount = models.IntegerField(default=0)
+    status = models.IntegerField(default=0, choices=type_status)
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Order Payment"
+        verbose_name_plural = "Order Payments"
+
+    def __str__(self):
+        try:
+            return f"{self.user.first_name} {self.user.last_name}"
+        except Exception:
+            return "-"

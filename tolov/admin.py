@@ -1,8 +1,7 @@
 from django.contrib import admin
-from .models import Order, OrderItem, ShippingAddress
+from .models import Order, OrderItem, ShippingAddress, OrderPayment
 # Register your models here.
-# admin.site.register(Order)
-# admin.site.register(OrderItem)
+
 admin.site.register(ShippingAddress)
 @admin.register(Order)
 class OrdersModelAdmin(admin.ModelAdmin):
@@ -32,4 +31,5 @@ class OrderItemsModelAdmin(admin.ModelAdmin):
     search_fields = [
         "name",
       ]
-     
+
+admin.site.register(OrderPayment)

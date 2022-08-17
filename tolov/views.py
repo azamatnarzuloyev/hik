@@ -1,10 +1,13 @@
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework.response import Response
-from rest_framework import status
 from datetime import datetime
+
 from product.models import Product
-from .models import  Order, OrderItem, ShippingAddress
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.response import Response
+from clickuz import ClickUz
+
+from .models import Order, OrderItem, ShippingAddress, OrderPayment
 from .serializers import OrderSerializer
 
 
@@ -55,6 +58,8 @@ def addOrderItems(request):
 
         serializer = OrderSerializer(order, many=False)
         return Response(serializer.data)
+
+
 @api_view(['GET'])
 def getOrderById(request, pk):
     user = request.user
@@ -66,7 +71,7 @@ def getOrderById(request, pk):
         else:
             message = {'detail': 'Not authorized to view this order'}
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
-    except:
+    except Exception:
         message = {'detail': 'Order does not exist'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -114,3 +119,28 @@ def updateOrderToDelivered(request, pk):
 
     return Response('Order was delivered')
 
+
+
+# def create_order_payment(amount:float, user:object ):
+
+@api_view(['get'])
+def create_invoise(request):
+    try:
+        amount = request.GET.get('amount')
+        user = request.user
+
+        order = OrderPayment.objects.create(
+            amount=amount,
+        )
+        url = ClickUz.generate_url(order_id=str(order.id), amount=str(
+            order.amount), return_url='https://smartsytem.uz')
+        print(url)
+        data = {
+            "success": True,
+            "message": "Payment yaratildi!",
+            "data": url
+        }
+    except Exception as e:
+        data = {"success": False, "error": f"{e}"}
+
+    return Response(data)
