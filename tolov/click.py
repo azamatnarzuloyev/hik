@@ -6,6 +6,7 @@ from .models import OrderPayment
 class OrderCheckAndPayment(ClickUz):
     def check_order(self, order_id: str, amount: str):
         try:
+            print(f'check_order: {order_id}  {amount}')
             order = OrderPayment.objects.get(id=int(order_id))
             if float(order.amount) == float(amount):
                 order.status = 1
@@ -17,6 +18,7 @@ class OrderCheckAndPayment(ClickUz):
             return self.ORDER_NOT_FOUND
 
     def successfully_payment(self, order_id: str, transaction: object):
+        print(f'successfully_payment: {order_id}  {str(transaction)}')
         order = OrderPayment.objects.get(id=int(order_id))
         user = order.user
         user.cash += order.amount

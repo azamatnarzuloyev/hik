@@ -32,4 +32,19 @@ class OrderItemsModelAdmin(admin.ModelAdmin):
         "name",
       ]
 
-admin.site.register(OrderPayment)
+class OrderPaymentAdmin(admin.ModelAdmin):
+    list_display = [
+        "order",
+        "amount",
+        "status",
+        "date",
+    ]
+    search_fields = [
+        "order",
+    ]
+    list_filter= [
+        'status'
+    ]
+    date_hierarchy = 'date'
+
+admin.site.register(OrderPayment, OrderPaymentAdmin)

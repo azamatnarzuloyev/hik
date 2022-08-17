@@ -12,8 +12,9 @@ urlpatterns = [
     # path('<str:pk>/deliver/', updateOrderToDelivered, name='order-delivered'),
     # path('<str:pk>/', getOrderById, name='user-order'),
     # path('<str:pk>/pay/', updateOrderToPaid, name='pay'),
+    
     #click payment url
     path('click/transaction/', TestView.as_view()),
-    path('create-invoise-click/', create_invoise),
+    path('create-click-payment/', create_click_payment),
 
 ]

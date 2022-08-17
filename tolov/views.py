@@ -122,9 +122,8 @@ def updateOrderToDelivered(request, pk):
 
 
 # def create_order_payment(amount:float, user:object ):
-
 @api_view(['get'])
-def create_invoise(request):
+def create_click_payment(request):
     try:
         amount = request.GET.get('amount')
         user = request.user
@@ -132,13 +131,13 @@ def create_invoise(request):
         order = OrderPayment.objects.create(
             amount=amount,
         )
-        url = ClickUz.generate_url(order_id=str(order.id), amount=str(
-            order.amount), return_url='https://smartsytem.uz')
+        url = ClickUz.generate_url(order_id=str(order.id), 
+        amount=str(order.amount), return_url='http://127.0.0.1:8000/api/v1/tolov/click/transaction/')
         print(url)
         data = {
             "success": True,
             "message": "Payment yaratildi!",
-            "data": url
+            "redirect_url": url
         }
     except Exception as e:
         data = {"success": False, "error": f"{e}"}
