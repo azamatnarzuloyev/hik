@@ -26,7 +26,7 @@ def send_otp(*, user_otp: object, phone: str):
     response = requests.request("POST", url, headers=headers,  files=files)
     user_otp.count+=1
     user_otp.save(update_fields=['otp','count'])
-    print(response.text)
+#     print(response.text)
     
     return Response(
  
