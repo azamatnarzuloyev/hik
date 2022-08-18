@@ -15,8 +15,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 
-# SECRET_KEY = env.str("SECRET_KEY")
-SECRET_KEY = 'django-insecure-m5f!ousf=baq*e92#0*3*kvh6y^t$kiq$7thmqn$g+!541rplt'
+SECRET_KEY = env.str("SECRET_KEY")
+
 # DEBUG =env.bool('DEBUG', default=False)
 
 
@@ -112,24 +112,24 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': os.environ.get('POSTRGRES_DB'),
-#         'USER': os.environ.get('POSTGRES_USER'),
-#         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-#         'HOST': os.environ.get('POSTGRES_HOST'),
-#         'PORT': '5432',
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('POSTRGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'PORT': '5432',
+    }
+}
 # DATABASES = {
 #     "default": env.dj_db_url("DATABASE_URL")      
 #   } 
