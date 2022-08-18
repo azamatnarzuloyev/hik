@@ -2,6 +2,7 @@ from django.urls import path
 
 from .click import TestView
 from .views import *
+from .create_payment import create_click_payment
 
 app_name = "tolov"
 
@@ -15,6 +16,6 @@ urlpatterns = [
     
     #click payment url
     path('click/transaction/', TestView.as_view()),
-    path('create-click-payment/', create_click_payment),
+    path('create-click-payment/', create_click_payment, name='create-click-payment'),
 
 ]

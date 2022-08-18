@@ -1,10 +1,12 @@
+#for log
+import logging
+import logging.config
 import os
 from datetime import timedelta
 from pathlib import Path
 
 from decouple import config
 from environs import Env
-import os
 
 env = Env()
 env.read_env()
@@ -15,7 +17,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECRET_KEY = env.str("SECRET_KEY")
 SECRET_KEY = 'django-insecure-m5f!ousf=baq*e92#0*3*kvh6y^t$kiq$7thmqn$g+!541rplt'
-# SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG =env.bool('DEBUG', default=False)
 
 
@@ -26,9 +27,8 @@ ALLOWED_HOSTS = ['smartsytem.uz' , '*']
 
 
 # Application definition
-
 INSTALLED_APPS = [
-    # 'jazzmin',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -59,7 +59,6 @@ INSTALLED_APPS = [
 
 ]
 JAZZMIN_UI_TWEAKS = {
- 
     "theme": "darkly",
     "theme": "slate",
 }
@@ -76,11 +75,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 #     'http://localhost:8000'
 # )
 
-CLICK_SETTINGS = {
-    'service_id':'1',
-    'merchant_id':'1',
-    'secret_key':'1'
-}
+
 
 MIDDLEWARE = [
 
@@ -176,7 +171,6 @@ USE_L10N=True
 USE_TZ = True
 
 AUTH_USER_MODEL = 'account.User'
-# SITE_ID=1
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -223,8 +217,8 @@ REST_FRAMEWORK = {
         "authentication": "5/hour",
         "verify_authentication": "8/hour",
     },
-#     'ACCESS_TOKEN_LIFETIME': timedelta(days=30), 
-#     'REFRESH_TOKEN_LIFETIME': timedelta(days=1), 
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30), 
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1), 
     'ROTATE_REFRESH_TOKENS': False, 
     'BLACKLIST_AFTER_ROTATION': True, 
     'UPDATE_LAST_LOGIN': False, 
@@ -233,14 +227,13 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'ecommerce.utils.custom_pagination.CustomPagination',
     'PAGE_SIZE': 12,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 12
 }
 
 
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Elektron dokon',
-    'DESCRIPTION': 'BU mening birinchi backend yozgan dasturim',
+    'DESCRIPTION': 'Bu mening birinchi backend yozgan dasturim',
     'VERSION': '1.0',
     'SWAGGER_UI_DIST': 'SIDECAR',
     'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
@@ -258,3 +251,26 @@ CLICK_SETTINGS = {
     'secret_key': 'NMW01rhKZXIjCu',
     'merchant_user_id': '26660'
 }
+
+
+logging.config.dictConfig(
+    {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "file": {"format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"},
+        },
+        "handlers": {
+            "file": {
+                "level": "ERROR",
+                "class": "logging.FileHandler",
+                "formatter": "file",
+                "filename": "debug.log",
+            },
+        },
+        "loggers": {
+            "": {"level": "ERROR", "handlers": [ "file"]},
+            "django.request": {"level": "INFO", "handlers": [ "file"]},
+        },
+    }
+)

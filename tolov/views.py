@@ -5,9 +5,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
-from clickuz import ClickUz
 
-from .models import Order, OrderItem, ShippingAddress, OrderPayment
+from .models import Order, OrderItem, ShippingAddress
 from .serializers import OrderSerializer
 
 
@@ -118,28 +117,3 @@ def updateOrderToDelivered(request, pk):
     order.save()
 
     return Response('Order was delivered')
-
-
-
-# def create_order_payment(amount:float, user:object ):
-@api_view(['get'])
-def create_click_payment(request):
-    try:
-        amount = request.GET.get('amount')
-        user = request.user
-
-        order = OrderPayment.objects.create(
-            amount=amount,
-        )
-        url = ClickUz.generate_url(order_id=str(order.id), 
-        amount=str(order.amount), return_url='http://127.0.0.1:8000/api/v1/tolov/click/transaction/')
-        print(url)
-        data = {
-            "success": True,
-            "message": "Payment yaratildi!",
-            "redirect_url": url
-        }
-    except Exception as e:
-        data = {"success": False, "error": f"{e}"}
-
-    return Response(data)

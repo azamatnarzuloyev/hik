@@ -63,7 +63,7 @@ class OrderPayment(models.Model):
     )
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
     amount = models.IntegerField(default=0)
-    status = models.IntegerField(default=0, choices=type_status)
+    status = models.IntegerField(default=1, choices=type_status)
     date = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -40,11 +40,18 @@ class OrderPaymentAdmin(admin.ModelAdmin):
         "date",
     ]
     search_fields = [
-        "order",
+        "order__user__phone",
     ]
     list_filter= [
         'status'
     ]
+    empty_value_display = '-empty-'
     date_hierarchy = 'date'
-
+    list_editable = ['status']
+    list_per_page = 20
+    list_select_related = ['order']
+    ordering = ['-date']
+    list_display_links = ['order', 'amount']
+    radio_fields = {"status":admin.HORIZONTAL}
+    
 admin.site.register(OrderPayment, OrderPaymentAdmin)

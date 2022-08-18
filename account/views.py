@@ -110,8 +110,7 @@ class UsersDetailUpdateDelete(RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         pk = self.kwargs.get("pk")
-        user = get_object_or_404(get_user_model(), pk=pk)
-        return user
+        return get_object_or_404(get_user_model(), pk=pk)
 
 
 class UserProfile(RetrieveUpdateDestroyAPIView):
@@ -151,40 +150,16 @@ class Login(APIView):
 
     def post(self, request):
         serializer = AuthenticationSerializer(data=request.data)
-        if serializer.is_valid():
-            received_phone = serializer.data.get("phone")
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        received_phone = serializer.data.get("phone")
+        user_otp, _ = PhoneOtp.objects.get_or_create(phone=received_phone)
+        if user_otp.count >= 5:
+            return Response({"Many Request": "You requested too much."}, status=status.HTTP_429_TOO_MANY_REQUESTS)
 
-            user_otp, _ = PhoneOtp.objects.get_or_create(
-                phone=received_phone,
-            )
-            if user_otp.count >= 5:
-                return Response(
-                    {
-                        "Many Request": "You requested too much.",
-                    },
-                    status=status.HTTP_429_TOO_MANY_REQUESTS,
-                )
+        user_is_exists: bool = get_user_model().objects.filter(phone=received_phone).values("phone").exists()
 
-            user_is_exists: bool = get_user_model().objects.filter(phone=received_phone).values("phone").exists()
-            if not user_is_exists:
-                return Response(
-                    {
-                        "No User exists.": "Please enter another phone number.",
-                    },
-                    status=status.HTTP_401_UNAUTHORIZED,
-                )
-
-            # The otp code is sent to the user's phone number for authentication
-            return send_otp(
-                user_otp=user_otp,
-                phone=received_phone,
-            )
-
-        else:
-            return Response(
-                serializer.errors, 
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        return send_otp(user_otp=user_otp, phone=received_phone) if user_is_exists else Response({"No User exists.": "Please enter another phone number."}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class Register(APIView):
@@ -200,40 +175,19 @@ class Register(APIView):
 
     def post(self, request):
         serializer = AuthenticationSerializer(data=request.data)
-        if serializer.is_valid():
-            received_phone = serializer.data.get("phone")
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        received_phone = serializer.data.get("phone")
+        user_otp, _ = PhoneOtp.objects.get_or_create(phone=received_phone)
+        if user_otp.count >= 5:
+            return Response({"Many Request": "You requested too much."}, status=status.HTTP_429_TOO_MANY_REQUESTS)
 
-            user_otp, _ = PhoneOtp.objects.get_or_create(
-                phone=received_phone,
-            )
-            if user_otp.count >= 5:
-                return Response(
-                    {
-                        "Many Request": "You requested too much.",
-                    },
-                    status=status.HTTP_429_TOO_MANY_REQUESTS,
-                )
-                
-            user_is_exists: bool = get_user_model().objects.filter(phone=received_phone).values("phone").exists()
-            if user_is_exists:
-                return Response(
-                    {
-                        "User exists.": "Please enter a different phone number.",
-                    },
-                    status=status.HTTP_401_UNAUTHORIZED,
-                )
+        user_is_exists: bool = get_user_model().objects.filter(phone=received_phone).values("phone").exists()
 
-            # The otp code is sent to the user's phone number for authentication
-            return send_otp(
-                user_otp=user_otp,
-                phone=received_phone,
-            )
+        if user_is_exists:
+            return Response({"User exists.": "Please enter a different phone number."}, status=status.HTTP_401_UNAUTHORIZED)
 
-        else:
-            return Response(
-                serializer.errors, 
-                status=status.HTTP_400_BAD_REQUEST,               
-            )
+        return send_otp(user_otp=user_otp, phone=received_phone)
 
 
 class VerifyOtp(APIView):
@@ -269,22 +223,22 @@ class VerifyOtp(APIView):
             )
 
         object = query.first()
-        # code_in_cache = cache.get(object.phone)
+        code_in_cache = cache.get(object.phone)
 
-        # if code_in_cache is None:
-        #     return Response(
-        #         {
-        #             "Code expired.": "The entered code has expired.",
-        #         },
-        #         status=status.HTTP_408_REQUEST_TIMEOUT,
-        #     )
-        # if code_in_cache != received_code:
-        #     return Response(
-        #         {
-        #             "Incorrect code.": "The code entered is incorrect.",
-        #         },
-        #         status=status.HTTP_406_NOT_ACCEPTABLE,
-            # )
+        if code_in_cache is None:
+            return Response(
+                {
+                    "Code expired.": "The entered code has expired.",
+                },
+                status=status.HTTP_408_REQUEST_TIMEOUT,
+            )
+        if code_in_cache != received_code:
+            return Response(
+                {
+                    "Incorrect code.": "The code entered is incorrect.",
+                },
+                status=status.HTTP_406_NOT_ACCEPTABLE,
+            )
         user, created = get_user_model().objects.get_or_create(phone=object.phone)
         if user.two_step_password:
             password = serializer.data.get("password")
@@ -303,7 +257,7 @@ class VerifyOtp(APIView):
 
         if self.confirm_for_authentication:
             refresh = RefreshToken.for_user(user)
-            # cache.delete(object.phone)
+            cache.delete(object.phone)
             object.verify, object.count = True, 0
             object.save(update_fields=["verify", "count"])
             context = {
@@ -330,36 +284,21 @@ class CreateTwoStepPassword(APIView):
     ]
 
     def post(self, request):
-        if not request.user.two_step_password:
-            serializer = CreateTwoStepPasswordSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            new_password = serializer.data.get("new_password")
+        if request.user.two_step_password:
+            return Response({"Error!": "Your request could not be approved."}, status=status.HTTP_401_UNAUTHORIZED)
 
-            try:
-                _: None = validate_password(new_password)
-            except ValidationError as err:
-                return Response(
-                    {"errors":err},
-                    status=status.HTTP_401_UNAUTHORIZED,
-                )
-
-            user = get_object_or_404(get_user_model(), pk=request.user.pk)
-            user.set_password(new_password)
-            user.two_step_password = True
-            user.save(update_fields=["password", "two_step_password"])     
-            return Response(
-                {
-                    "Successful.":"Your password was changed successfully.",
-                },
-                status=status.HTTP_200_OK,
-            )
-
-        return Response(
-            {
-                "Error!":"Your request could not be approved.",
-            },
-            status=status.HTTP_401_UNAUTHORIZED,
-        )
+        serializer = CreateTwoStepPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_password = serializer.data.get("new_password")
+        try:
+            _: None = validate_password(new_password)
+        except ValidationError as err:
+            return Response({"errors": err}, status=status.HTTP_401_UNAUTHORIZED)
+        user = get_object_or_404(get_user_model(), pk=request.user.pk)
+        user.set_password(new_password)
+        user.two_step_password = True
+        user.save(update_fields=["password", "two_step_password"])
+        return Response({"Successful.": "Your password was changed successfully."}, status=status.HTTP_200_OK)
 
 
 class ChangeTwoStepPassword(APIView):

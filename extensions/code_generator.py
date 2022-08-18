@@ -1,7 +1,6 @@
-from string import digits, ascii_lowercase, ascii_uppercase
 from random import choice as rand_choice
 from secrets import choice as sec_choice
-from os.path import basename, splitext
+from string import ascii_lowercase, ascii_uppercase, digits
 
 
 def slug_generator(size: int = 10, char: str = digits + ascii_uppercase + ascii_lowercase) -> str:
