@@ -52,6 +52,6 @@ urlpatterns += static(
 #                           document_root=settings.MEDIA_ROOT)
 
 
-if  settings.DEBUG:
-    urlpatterns += [re_path(r'^.*',
-                            TemplateView.as_view(template_name='404.html'))]
+# if  settings.DEBUG:
+#     urlpatterns += [re_path(r'^.*',
+#                             TemplateView.as_view(template_name='404.html'))]
