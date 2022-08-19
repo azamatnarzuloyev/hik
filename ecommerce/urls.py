@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.conf import settings
-from django.urls import path, include
+from django.urls import path, include,re_path
+from django.http import HttpResponse
 
+from django.views.generic import TemplateView
 
 from django.conf.urls.static import static
 
@@ -52,6 +54,6 @@ urlpatterns += static(
 #                           document_root=settings.MEDIA_ROOT)
 
 
-# if  settings.DEBUG:
-#     urlpatterns += [re_path(r'^.*',
-#                             TemplateView.as_view(template_name='404.html'))]
+if  settings.DEBUG:
+    urlpatterns += [re_path(r'^.*',
+                            TemplateView.as_view(template_name='404.html'))]
