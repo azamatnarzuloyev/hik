@@ -20,7 +20,7 @@ SECRET_KEY = env.str("SECRET_KEY")
 # DEBUG =env.bool('DEBUG', default=False)
 
 
-DEBUG = True
+DEBUG = False
 
 
 ALLOWED_HOSTS = ['smartsytem.uz']
@@ -28,7 +28,7 @@ ALLOWED_HOSTS = ['smartsytem.uz']
 
 # Application definition
 INSTALLED_APPS = [
-    'jazzmin',
+#     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
