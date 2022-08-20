@@ -54,16 +54,13 @@ class OtpSerializer(serializers.Serializer):
         max_length=6,
         min_length=6,
     )
-    password = serializers.CharField(
-        max_length=20,
-        required=False,
-    )
-
+    
     def validate_code(self, value):
         try:
             int(value)
-        except ValueError as e:
-            raise serializers.ValidationError("Invalid Code.") from e
+        except ValueError as _:
+            raise serializers.ValidationError("Invalid Code.")
+
         return value
 
 
