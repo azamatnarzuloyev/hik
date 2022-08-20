@@ -10,6 +10,7 @@ from rest_framework.generics import (
     CreateAPIView,
     RetrieveUpdateAPIView,
 )
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -30,6 +31,7 @@ from .serializers import (
 from .models import PhoneOtp 
 from .send_otp import send_otp
 from permissions import IsSuperUser
+from extensions.code_generator import get_client_ip
 
 
 class LogoutView(APIView):
@@ -147,20 +149,36 @@ class Login(APIView):
     permission_classes = [
         AllowAny,
     ]
+    throttle_scope = "authentication"
+    throttle_classes = [
+        ScopedRateThrottle,
+    ]
 
     def post(self, request):
         serializer = AuthenticationSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        received_phone = serializer.data.get("phone")
-        user_otp, _ = PhoneOtp.objects.get_or_create(phone=received_phone)
-        if user_otp.count >= 5:
-            return Response({"Many Request": "You requested too much."}, status=status.HTTP_429_TOO_MANY_REQUESTS)
+        if serializer.is_valid():
+            received_phone = serializer.data.get("phone")
 
-        user_is_exists: bool = get_user_model().objects.filter(phone=received_phone).values("phone").exists()
+            user_is_exists: bool = get_user_model().objects.filter(phone=received_phone).values("phone").exists()
+            if not user_is_exists:
+                return Response(
+                    {
+                        "No User exists.": "Please enter another phone number.",
+                    },
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
 
-        return send_otp(user_otp=user_otp, phone=received_phone) if user_is_exists else Response({"No User exists.": "Please enter another phone number."}, status=status.HTTP_401_UNAUTHORIZED)
+            # The otp code is sent to the user's phone number for authentication
+            return send_otp(
+                request,
+                phone=received_phone,
+            )
 
+        else:
+            return Response(
+                serializer.errors, 
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 class Register(APIView):
     """
@@ -172,102 +190,104 @@ class Register(APIView):
     permission_classes = [
         AllowAny,
     ]
+    throttle_scope = "authentication"
+    throttle_classes = [
+        ScopedRateThrottle,
+    ]
 
     def post(self, request):
         serializer = AuthenticationSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        received_phone = serializer.data.get("phone")
-        user_otp, _ = PhoneOtp.objects.get_or_create(phone=received_phone)
-        if user_otp.count >= 5:
-            return Response({"Many Request": "You requested too much."}, status=status.HTTP_429_TOO_MANY_REQUESTS)
+        if serializer.is_valid():
+            received_phone = serializer.data.get("phone")
+ 
+            user_is_exists: bool = get_user_model().objects.filter(phone=received_phone).values("phone").exists()
+            if user_is_exists:
+                return Response(
+                    {
+                        "User exists.": "Please enter a different phone number.",
+                    },
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
 
-        user_is_exists: bool = get_user_model().objects.filter(phone=received_phone).values("phone").exists()
+            # The otp code is sent to the user's phone number for authentication
+            return send_otp(
+                request,
+                phone=received_phone,
+            )
 
-        if user_is_exists:
-            return Response({"User exists.": "Please enter a different phone number."}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response(
+                serializer.errors, 
+                status=status.HTTP_400_BAD_REQUEST,               
+            )
 
-        return send_otp(user_otp=user_otp, phone=received_phone)
-
-
+            
 class VerifyOtp(APIView):
     """
     post:
         Send otp code to verify mobile number and complete authentication.
-        If the user has a 2-step password, he must also send a password.
-        parameters: [otp, password]
+        parameters: [otp,]
     """
 
     permission_classes = [
         AllowAny,
     ]
-    # When the confirm_for_authentication attribute equals True, through jwt, the token is generated for authentication
-    confirm_for_authentication = False
+    throttle_scope = "verify_authentication"
+    throttle_classes = [
+        ScopedRateThrottle,
+    ]
 
-    def post(self, request):  # sourcery skip: avoid-builtin-shadow
+    def post(self, request):
         serializer = OtpSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(
-                serializer.errors, 
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        received_code = serializer.data.get("code")
-        query = PhoneOtp.objects.filter(otp=received_code)
+        if serializer.is_valid():
+            received_code = serializer.data.get("code")
+            ip = get_client_ip(request)
+            phone = cache.get(f"{ip}-for-authentication")
+            otp = cache.get(phone)
 
-        if not query.exists():
-            return Response(
-                {
-                    "Incorrect code.": "The code entered is incorrect.",
-                },
-                status=status.HTTP_406_NOT_ACCEPTABLE,
-            )
+            if otp is not None:
+                if otp == received_code:
+                    user, created = get_user_model().objects.get_or_create(phone=phone)
+                    if user.two_step_password:
+                        cache.set(f"{ip}-for-two-step-password", user, 250)
+                        return Response(
+                            {
+                                "Thanks": "Please enter your two-step password",
+                            },
+                            status=status.HTTP_200_OK,
+                        )
 
-        object = query.first()
-        code_in_cache = cache.get(object.phone)
+                    refresh = RefreshToken.for_user(user)
+                    cache.delete(phone)
+                    cache.delete(f"{ip}-for-authentication")
 
-        if code_in_cache is None:
-            return Response(
-                {
-                    "Code expired.": "The entered code has expired.",
-                },
-                status=status.HTTP_408_REQUEST_TIMEOUT,
-            )
-        if code_in_cache != received_code:
-            return Response(
-                {
-                    "Incorrect code.": "The code entered is incorrect.",
-                },
-                status=status.HTTP_406_NOT_ACCEPTABLE,
-            )
-        user, created = get_user_model().objects.get_or_create(phone=object.phone)
-        if user.two_step_password:
-            password = serializer.data.get("password")
-            check_password: bool = user.check_password(password)
-            if check_password:
-                self.confirm_for_authentication = True
+                    context = {
+                        "created": created,
+                        "refresh": str(refresh),
+                        "access": str(refresh.access_token),
+                    }
+                    return Response(
+                        context,
+                        status=status.HTTP_200_OK,
+                    )
+                else:
+                    return Response(
+                        {
+                            "Incorrect code.": "The code entered is incorrect.",
+                        },
+                        status=status.HTTP_406_NOT_ACCEPTABLE,
+                    )
             else:
                 return Response(
                     {
-                        "Incorrect password.": "The password entered is incorrect.",
+                        "Code expired.": "The entered code has expired.",
                     },
-                    status=status.HTTP_406_NOT_ACCEPTABLE,
+                    status=status.HTTP_408_REQUEST_TIMEOUT,
                 )
         else:
-            self.confirm_for_authentication = True
-
-        if self.confirm_for_authentication:
-            refresh = RefreshToken.for_user(user)
-            cache.delete(object.phone)
-            object.verify, object.count = True, 0
-            object.save(update_fields=["verify", "count"])
-            context = {
-                "created": created,
-                "refresh": str(refresh),
-                "access": str(refresh.access_token),
-            }
             return Response(
-                context, 
-                status=status.HTTP_200_OK,
+                serializer.errors, 
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
 
