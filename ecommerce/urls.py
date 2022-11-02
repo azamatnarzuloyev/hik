@@ -19,7 +19,7 @@ from drf_spectacular.views import (
 
 urlpatterns = [
    
-   path('azamat/', admin.site.urls),
+   path('admin/', admin.site.urls),
    path('api/v1/', include("product.urls")),
    path('api/v1/account/', include('account.urls', namespace='account')),
    path('blog/', include('blog.urls', namespace='blog')),
